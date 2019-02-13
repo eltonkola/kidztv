@@ -1,0 +1,76 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.eltonkola.kidztv"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.1.0-alpha04'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    implementation 'com.devbrackets.android:exomedia:4.3.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.android.material:material:1.1.0-alpha03'
+    implementation 'androidx.media:media:1.0.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation "androidx.constraintlayout:constraintlayout:2.0.0-alpha3"
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:' + rootProject.lifecycleVersion
+
+//    implementation 'androidx.appcompat:appcompat:' + rootProject.appCompatVersion
+//    implementation 'androidx.cardview:cardview:' + rootProject.cardViewVersion
+//    implementation 'androidx.legacy:legacy-support-v4:' + rootProject.legacySupportVersion
+    implementation 'androidx.lifecycle:lifecycle-extensions:' + rootProject.lifecycleVersion
+    implementation 'androidx.recyclerview:recyclerview:' + rootProject.recyclerViewVersion
+
+    // RxJava2
+    implementation "io.reactivex.rxjava2:rxandroid:${RXANDROID_VERSION}"
+    implementation "io.reactivex.rxjava2:rxjava:${RXJAVA_2_VERSION}"
+    implementation "io.reactivex.rxjava2:rxkotlin:${RXKOTLIN_VERSION}"
+
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
+
+    implementation 'com.github.HaarigerHarald:android-youtubeExtractor:1.8.0'
+
+    // core
+//    implementation 'com.liulishuo.okdownload:okdownload:1.0.5'
+//// provide sqlite to store breakpoints
+//    implementation 'com.liulishuo.okdownload:sqlite:1.0.5'
+//// provide okhttp to connect to backend
+//// and then please import okhttp dependencies by yourself
+//    implementation 'com.liulishuo.okdownload:okhttp:1.0.5'
+
+}

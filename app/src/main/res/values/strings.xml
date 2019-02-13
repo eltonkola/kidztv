@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">KidzTv</string>
+
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="error_no_yt_link">Not a valid YouTube link!</string>
+
+
+</resources>
