@@ -34,20 +34,24 @@ class MainViewModel : ViewModel() {
         fileObserver = MyFileObserver(sdCardPath)
         loading.postValue(true)
 
+    }
+
+    fun loadVideos() {
+
         compositeDisposable.add(fileObserver.observable
             .subscribe(
                 { path ->
                     Timber.i("@@@ path: $path")
-                    loadVideos()
+                    reloadVideos()
                 },
                 { t ->
                     Timber.e(t)
                 }
             ))
-        loadVideos()
+        reloadVideos()
     }
 
-    fun loadVideos() {
+    private fun reloadVideos() {
         videos.postValue(File(sdCardPath).walkTopDown().filter { !it.isDirectory }.toList().map { VideoElement(it) })
     }
 

@@ -5,6 +5,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -14,66 +16,30 @@ import com.eltonkola.kidztv.R
 import com.eltonkola.kidztv.ui.youtube.BrowseActivity
 import com.eltonkola.kidztv.utils.SpacesItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
+
+
 class MainActivity : AppCompatActivity() {
-    private val mHideHandler = Handler()
-    private val mHidePart2Runnable = Runnable {
-        // Delayed removal of status and navigation bar
 
-        // Note that some of these constants are new as of API 16 (Jelly Bean)
-        // and API 19 (KitKat). It is safe to use them, as they are inlined
-        // at compile-time and do nothing on earlier devices.
-        fullscreen_content.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                    View.SYSTEM_UI_FLAG_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-    }
-    private val mShowPart2Runnable = Runnable {
-        // Delayed display of UI elements
-        supportActionBar?.hide()
-        fullscreen_content_controls.visibility = View.VISIBLE
-        fullscreen_top_content_controls.visibility = View.VISIBLE
-    }
-    private var mVisible: Boolean = false
-    private val mHideRunnable = Runnable { hide() }
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    private val mDelayHideTouchListener = View.OnTouchListener { _, _ ->
-        if (AUTO_HIDE) {
-            delayedHide(AUTO_HIDE_DELAY_MILLIS)
-        }
-        false
-    }
+    private var mVisible: Boolean = true
 
     lateinit var vm: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+//        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+
+
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
-        mVisible = true
-
-        // Set up the user interaction to manually show or hide the system UI.
-        fullscreen_content.setOnClickListener { toggle() }
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-        // dummy_button.setOnTouchListener(mDelayHideTouchListener)
-
+        video_player.setOnClickListener { toggle() }
 
         vm = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
@@ -81,48 +47,33 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Loading: $loading", Toast.LENGTH_SHORT).show()
         })
 
-        video_content.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        video_content.setHasFixedSize(true)
-        video_content.addItemDecoration(
-            SpacesItemDecoration(
-                resources,
-                R.dimen.horizontal_list_item_spacing,
-                R.dimen.horizontal_list_item_top_margin,
-                R.dimen.horizontal_list_item_bottom_margin,
-                R.dimen.margin_start_end,
-                R.dimen.margin_start_end
-            )
-        )
+        video_grid.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        video_grid.setHasFixedSize(true)
 
+        video_grid.addItemDecoration(SpacesItemDecoration( resources, R.dimen.horizontal_list_item_spacing, R.dimen.horizontal_list_item_top_margin, R.dimen.horizontal_list_item_bottom_margin, R.dimen.margin_start_end, R.dimen.margin_start_end))
 
-        video_content.adapter = VideoListAdapter(this, { video ->
-
-            video_view.setVideoURI(Uri.fromFile(video.file))
-
-        })
+        video_grid.adapter = VideoListAdapter(this) { video ->
+            video_player.setVideoURI(Uri.fromFile(video.file))
+        }
 
         vm.videos.observe(this, Observer { videos ->
-            Toast.makeText(this, "Videos: ${videos.size}", Toast.LENGTH_SHORT).show()
-
-            (video_content.adapter as VideoListAdapter).setVideoElements(videos)
-
+            (video_grid.adapter as VideoListAdapter).setVideoElements(videos)
         })
 
-        video_view.setOnPreparedListener {
-            video_view.start()
+        video_player.setOnPreparedListener {
+            video_player.start()
         }
 
         but_settings.setOnClickListener {
             startActivity(Intent(this, BrowseActivity::class.java))
         }
+
         vm.permissionState.observe(this, Observer {
             when (it) {
                 MainViewModel.PermissionState.CHECKING -> {
-                    Toast.makeText(this, "Checking permissions..", Toast.LENGTH_SHORT).show()
                 }
                 MainViewModel.PermissionState.PERMISSION_OK -> {
-                    Toast.makeText(this, "Permissions granted :)", Toast.LENGTH_SHORT).show()
-
+                    vm.loadVideos()
                 }
                 MainViewModel.PermissionState.PERMISSION_KO -> {
                     Toast.makeText(this, "No permissions no fun!", Toast.LENGTH_LONG).show()
@@ -132,18 +83,13 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-
         vm.checkPermissions(this)
     }
 
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-        delayedHide(100)
+//        hide()
     }
 
     private fun toggle() {
@@ -155,55 +101,51 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun hide() {
-        // Hide UI first
-        supportActionBar?.hide()
-        fullscreen_content_controls.visibility = View.GONE
-        fullscreen_top_content_controls.visibility = View.GONE
-        mVisible = false
+        animateHideView(video_grid, 1)
+        animateHideView(top_bar, -1)
+//        top_bar.visibility = View.GONE
 
-        // Schedule a runnable to remove the status and navigation bar after a delay
-        mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
+        mVisible = false
     }
+
+    private fun animateHideView(view: View, per: Int){
+        view.animate()
+            .translationY(per* view.height.toFloat())
+            .alpha(0.0f)
+            .setDuration(100)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    super.onAnimationEnd(animation)
+                    view.visibility = View.GONE
+                }
+            })
+    }
+
+
+    private fun animateHideShow(view: View){
+        view.visibility = View.VISIBLE
+        view.animate()
+            .translationY(0.toFloat())
+            .alpha(1.0f)
+            .setDuration(100)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    super.onAnimationEnd(animation)
+
+                }
+            })
+    }
+
 
     private fun show() {
-        // Show the system bar
-        fullscreen_content.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        animateHideShow(video_grid)
+        animateHideShow(top_bar)
+
+//        top_bar.visibility = View.VISIBLE
+
+//        root_view.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+
         mVisible = true
-
-        // Schedule a runnable to display UI elements after a delay
-        mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
     }
 
-    /**
-     * Schedules a call to hide() in [delayMillis], canceling any
-     * previously scheduled calls.
-     */
-    private fun delayedHide(delayMillis: Int) {
-        mHideHandler.removeCallbacks(mHideRunnable)
-        mHideHandler.postDelayed(mHideRunnable, delayMillis.toLong())
-    }
-
-    companion object {
-        /**
-         * Whether or not the system UI should be auto-hidden after
-         * [AUTO_HIDE_DELAY_MILLIS] milliseconds.
-         */
-        private val AUTO_HIDE = true
-
-        /**
-         * If [AUTO_HIDE] is set, the number of milliseconds to wait after
-         * user interaction before hiding the system UI.
-         */
-        private val AUTO_HIDE_DELAY_MILLIS = 3000
-
-        /**
-         * Some older devices needs a small delay between UI widget updates
-         * and a change of the status and navigation bar.
-         */
-        private val UI_ANIMATION_DELAY = 300
-    }
 }

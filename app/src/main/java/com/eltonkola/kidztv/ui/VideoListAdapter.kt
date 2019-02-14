@@ -28,7 +28,7 @@ class VideoListAdapter constructor(context: Context, val onPlay: (VideoElement) 
         private val title: TextView = itemView.findViewById(R.id.title)
 
         fun bind(videoElement: VideoElement) {
-            itemView.layoutParams.width = (getWidthScreen(itemView.context) * 0.32f).toInt()
+            itemView.layoutParams.width = (getWidthScreen(itemView.context) * 0.2f).toInt()
 
             title.text = videoElement.file.name
             itemView.setOnClickListener { onPlay.invoke(videoElement) }
