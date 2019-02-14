@@ -4,10 +4,12 @@ import android.Manifest
 import android.os.Environment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.eltonkola.kidztv.data.AppFolder
 import com.eltonkola.kidztv.data.MyFileObserver
 import com.eltonkola.kidztv.model.VideoElement
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
+import timber.log.Timber
 import java.io.File
 
 class MainViewModel : ViewModel() {
@@ -20,7 +22,7 @@ class MainViewModel : ViewModel() {
         PERMISSION_KO
     }
 
-    val sdCardPath: String get() = Environment.getExternalStorageDirectory().path + "/kidztv/"
+    val sdCardPath: String get() = AppFolder().sdCardPath
 
     val loading = MutableLiveData<Boolean>()
     var videos = MutableLiveData<List<VideoElement>>()
@@ -29,23 +31,19 @@ class MainViewModel : ViewModel() {
     val fileObserver: MyFileObserver
 
     init {
-        val dir = File(sdCardPath)
-        if (!dir.exists()) {
-            dir.mkdirs()
-        }
         fileObserver = MyFileObserver(sdCardPath)
         loading.postValue(true)
 
-//        compositeDisposable.add(fileObserver.observable
-//            .subscribe(
-//                { path ->
-//                    Timber.i("@@@ path: $path")
-//                    loadVideos()
-//                },
-//                { t ->
-//                    Timber.e(t)
-//                }
-//            ))
+        compositeDisposable.add(fileObserver.observable
+            .subscribe(
+                { path ->
+                    Timber.i("@@@ path: $path")
+                    loadVideos()
+                },
+                { t ->
+                    Timber.e(t)
+                }
+            ))
         loadVideos()
     }
 

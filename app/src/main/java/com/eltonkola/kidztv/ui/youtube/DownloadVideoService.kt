@@ -6,19 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
+import com.eltonkola.kidztv.data.AppFolder
 import java.io.File
 
 class DownloadVideoService : IntentService("DownloadVideoService") {
 
 
-    val sdCardPath: String get() = Environment.getExternalStorageDirectory().path + "/kidztv/"
+    private val externalVideoPath: String get() = AppFolder().externalVideoPath
 
-    init {
-        val dir = File(sdCardPath)
-        if (!dir.exists()) {
-            dir.mkdirs()
-        }
-    }
 
     override fun onHandleIntent(intent: Intent?) {
         val downloadPath = intent!!.getStringExtra(DOWNLOAD_PATH)
@@ -34,8 +29,7 @@ class DownloadVideoService : IntentService("DownloadVideoService") {
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)  // This will show notification on top when downloading the file.
         request.setTitle("Downloading $downloadTitle") // Title for notification.
         request.setVisibleInDownloadsUi(true)
-
-        request.setDestinationInExternalPublicDir(sdCardPath, fileName)  // Storage directory path
+        request.setDestinationInExternalPublicDir(externalVideoPath, fileName)  // Storage directory path
         (getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager).enqueue(request) // This will start downloading
     }
 
