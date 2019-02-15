@@ -16,18 +16,16 @@ class SettingsActivity : AppCompatActivity() {
         override fun toString(): String = title
     }
 
-
-    val settingsItems = mutableListOf<MenuItem>()
+    private val settingsItems = mutableListOf<MenuItem>()
 
     init {
 
-
-        settingsItems.add(MenuItem("Settings"))
+        settingsItems.add(MenuItem("App Settings"))
         settingsItems.add(SettingsItem("Video Manager", R.drawable.ic_subscriptions_black_24dp, VideoManagerFragment()))
         settingsItems.add(SettingsItem("App Manager", R.drawable.ic_view_comfy_black_24dp, PinFragment()))
         settingsItems.add(SettingsItem("Stats", R.drawable.ic_graphic_eq_black_24dp, PinFragment()))
         settingsItems.add(SettingsItem("Pin code", R.drawable.ic_security_black_24dp, PinFragment()))
-        settingsItems.add(MenuItem("Plugins"))
+        settingsItems.add(MenuItem("Plugins/Download videos"))
         settingsItems.add(SettingsItem("Youtube Downloader", R.drawable.ic_cloud_download_black_24dp, PinFragment()))
         settingsItems.add(SettingsItem("Get plugins", R.drawable.ic_get_app_black_24dp, DownloadPluginsFragment()))
         settingsItems.add(MenuItem("Other"))
