@@ -9,46 +9,89 @@
               android:id="@+id/root_view"
               tools:context=".ui.MainActivity">
 
-    <RelativeLayout android:layout_width="match_parent"
-                    android:id="@+id/top_bar"
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="0dp"
+                  android:layout_weight="1">
+
+        <RelativeLayout android:id="@+id/container"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+            <com.devbrackets.android.exomedia.ui.widget.VideoView
+                    android:id="@+id/video_player"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"/>
+
+
+            <in.aabhasjindal.otptextview.OtpTextView
+                    android:id="@+id/otp_view"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-
-    >
-
-        <Button android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/but_timer"
-                android:text="Timer"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-        />
-
-        <ImageView android:layout_width="120dp"
-                   android:layout_height="40dp"
-                   android:id="@+id/logo"
-                   android:layout_centerInParent="true"
-                   android:src="@drawable/ic_launcher_background"
-        />
+                    android:textColor="#ffffff"
+                    app:height="40dp"
+                    app:width="40dp"
+                    android:layout_centerInParent="true"
+                    app:bar_enabled="true"
+                    app:bar_height="2dp"
+                    app:length="4"
+                    app:hide_otp="true"
+                    app:bar_success_color="#4CFF00"
+                    app:bar_error_color="#ff0000"
+                    android:visibility="gone"
+                    app:otp_text_size="30dp"/>
 
 
-        <Button android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/but_settings"
-                android:text="Settings"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-        />
+        </RelativeLayout>
 
-    </RelativeLayout>
+        <LinearLayout android:layout_width="120dp"
+                      android:id="@+id/top_bar"
+                      android:layout_height="match_parent"
+                      android:background="#851E51A3"
+                      android:orientation="vertical"
+
+        >
+
+            <ImageView android:layout_width="match_parent"
+                       android:layout_height="40dp"
+                       android:id="@+id/logo"
+                       android:scaleType="centerCrop"
+                       android:layout_centerInParent="true"
+                       android:src="@drawable/ic_launcher_background"
+            />
 
 
-    <com.devbrackets.android.exomedia.ui.widget.VideoView
-            android:id="@+id/video_player"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"/>
+            <Button android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/but_timer"
+                    android:text="Timer"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+            />
+
+
+            <Button android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/but_settings"
+                    android:text="Settings"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+            />
+
+            <Button android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/but_apps"
+                    android:text="Apps"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+            />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 
     <!--app:useDefaultControls="true"-->

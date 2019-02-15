@@ -65,6 +65,9 @@ dependencies {
 
     implementation 'com.github.HaarigerHarald:android-youtubeExtractor:1.8.0'
 
+
+    implementation 'com.github.aabhasr1:OtpView:1.0.5'
+
     // core
 //    implementation 'com.liulishuo.okdownload:okdownload:1.0.5'
 //// provide sqlite to store breakpoints

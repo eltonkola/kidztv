@@ -1,9 +1,11 @@
 package com.eltonkola.kidztv.ui
 
+import `in`.aabhasjindal.otptextview.OTPListener
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -16,10 +18,6 @@ import com.eltonkola.kidztv.R
 import com.eltonkola.kidztv.ui.youtube.BrowseActivity
 import com.eltonkola.kidztv.utils.SpacesItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -50,7 +48,16 @@ class MainActivity : AppCompatActivity() {
         video_grid.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         video_grid.setHasFixedSize(true)
 
-        video_grid.addItemDecoration(SpacesItemDecoration( resources, R.dimen.horizontal_list_item_spacing, R.dimen.horizontal_list_item_top_margin, R.dimen.horizontal_list_item_bottom_margin, R.dimen.margin_start_end, R.dimen.margin_start_end))
+        video_grid.addItemDecoration(
+            SpacesItemDecoration(
+                resources,
+                R.dimen.horizontal_list_item_spacing,
+                R.dimen.horizontal_list_item_top_margin,
+                R.dimen.horizontal_list_item_bottom_margin,
+                R.dimen.margin_start_end,
+                R.dimen.margin_start_end
+            )
+        )
 
         video_grid.adapter = VideoListAdapter(this) { video ->
             video_player.setVideoURI(Uri.fromFile(video.file))
@@ -84,12 +91,60 @@ class MainActivity : AppCompatActivity() {
         })
 
         vm.checkPermissions(this)
+
+
+        otp_view.setOtpListener(object : OTPListener {
+            override fun onInteractionListener() {
+
+            }
+
+            override fun onOTPComplete(otp: String) {
+                if ("1234".contentEquals(otp)) {
+                    otp_view.showSuccess()
+                    Toast.makeText(this@MainActivity, "Done!!", Toast.LENGTH_SHORT).show()
+                } else {
+                    otp_view.showError()
+                    otp_view.otp = ""
+                    Toast.makeText(this@MainActivity, "Error $otp, is the wrong code", Toast.LENGTH_SHORT).show()
+
+                }
+            }
+        })
+
     }
 
+//    fun onCreateInputConnection(outAttrs: EditorInfo): InputConnection {
+//        outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI
+//
+//        // etc.
+//    }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 //        hide()
+
+//        hideSystemUI()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) hideSystemUI()
+    }
+
+
+    private fun hideSystemUI() {
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+                // Set the content to appear under the system bars so that the
+                // content doesn't resize when the system bars hide and show.
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                // Hide the nav bar and status bar
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
 
     private fun toggle() {
@@ -98,6 +153,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             show()
         }
+        hideSystemUI()
     }
 
     private fun hide() {
@@ -108,9 +164,9 @@ class MainActivity : AppCompatActivity() {
         mVisible = false
     }
 
-    private fun animateHideView(view: View, per: Int){
+    private fun animateHideView(view: View, per: Int) {
         view.animate()
-            .translationY(per* view.height.toFloat())
+            .translationY(per * view.height.toFloat())
             .alpha(0.0f)
             .setDuration(100)
             .setListener(object : AnimatorListenerAdapter() {
@@ -122,7 +178,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun animateHideShow(view: View){
+    private fun animateHideShow(view: View) {
         view.visibility = View.VISIBLE
         view.animate()
             .translationY(0.toFloat())
