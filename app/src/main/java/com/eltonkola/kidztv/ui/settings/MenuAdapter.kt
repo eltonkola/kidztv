@@ -5,13 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.eltonkola.kidztv.R
 import kotlinx.android.synthetic.main.item_settings_list.view.*
 
 
-class SimpleItemRecyclerViewAdapter(
+class MenuAdapter(
     private val parentActivity: SettingsActivity,
     private val values: List<SettingsActivity.MenuItem>,
     private val onClickListener: View.OnClickListener
@@ -46,10 +45,7 @@ class SimpleItemRecyclerViewAdapter(
         } else if (holder is ViewHolder) {
 
             holder.icon.setImageDrawable(
-                ContextCompat.getDrawable(
-                    parentActivity,
-                    (item as SettingsActivity.SettingsItem).icon
-                )
+                (item as SettingsActivity.SettingsItem).icon
             )
             holder.title.text = item.title
             with(holder.itemView) {

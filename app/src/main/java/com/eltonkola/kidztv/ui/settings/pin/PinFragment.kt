@@ -1,4 +1,4 @@
-package com.eltonkola.kidztv.ui.settings
+package com.eltonkola.kidztv.ui.settings.pin
 
 import android.os.Bundle
 import android.view.LayoutInflater

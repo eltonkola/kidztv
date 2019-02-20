@@ -6,11 +6,11 @@
               android:orientation="horizontal">
 
     <ImageView
-            android:tint="@color/white"
             android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_margin="@dimen/text_margin"
+            android:scaleType="centerCrop"
             android:textAppearance="?attr/textAppearanceListItem"/>
 
     <TextView
