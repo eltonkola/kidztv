@@ -1,8 +1,6 @@
 package com.eltonkola.kidztv.ui.settings
 
-import android.content.ComponentName
 import android.content.Intent
-import android.content.pm.ResolveInfo
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
@@ -11,12 +9,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.eltonkola.kidztv.BuildConfig
 import com.eltonkola.kidztv.R
+import com.eltonkola.kidztv.data.AppManager
 import com.eltonkola.kidztv.ui.settings.appmanager.AppManagerFragment
 import com.eltonkola.kidztv.ui.settings.pin.PinFragment
 import com.eltonkola.kidztv.ui.settings.stats.StatsFragment
 import com.eltonkola.kidztv.ui.settings.videomanager.VideoManagerFragment
 import kotlinx.android.synthetic.main.activity_settings.*
-import java.util.*
+import org.koin.android.ext.android.inject
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -29,8 +28,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private val settingsItems = mutableListOf<MenuItem>()
-    val APP_PLUGIN = "com.eltonkola.kidstv.plugin.PLUGIN_APPLICATION"
 
+    val appManager: AppManager by inject()
 
     fun initMenu() {
 
@@ -66,24 +65,11 @@ class SettingsActivity : AppCompatActivity() {
         settingsItems.add(MenuItem("Plugins/Download videos"))
 
 
-        //dynamic plugins
-        val pm = applicationContext.packageManager
-        val queryIntent = Intent(Intent.ACTION_MAIN)
-        queryIntent.addCategory(APP_PLUGIN)
-        val infos = pm.queryIntentActivities(queryIntent, 0)
-        for (resolveInfo in infos) {
-            if (resolveInfo.activityInfo != null) {
-                settingsItems.add(
-                    SettingsItem(
-                        resolveInfo.activityInfo.loadLabel(pm).toString(),
-                        pm.getApplicationIcon(resolveInfo.activityInfo.packageName),
-                        null,
-                        getIntentForPackge(resolveInfo.activityInfo.packageName)
-                    )
-                )
-            }
-        }
+//        appManager.getPlugins().forEach {
+//            settingsItems.add(appManager.toSettingItem(it))
+//        }
 
+        settingsItems.addAll(appManager.getPlugins().map { appManager.toSettingItem(it) })
 
         settingsItems.add(
             SettingsItem(
@@ -103,32 +89,6 @@ class SettingsActivity : AppCompatActivity() {
         )
 
 
-    }
-
-    fun getIntentForPackge(packageName: String): Intent {
-        var intent = Intent()
-        intent.setPackage(packageName)
-
-        val pm = packageManager
-        val resolveInfos = pm.queryIntentActivities(intent, 0)
-        Collections.sort(resolveInfos, ResolveInfo.DisplayNameComparator(pm))
-
-        if (resolveInfos.size > 0) {
-            val launchable = resolveInfos[0]
-            val activity = launchable.activityInfo
-            val name = ComponentName(
-                activity.applicationInfo.packageName,
-                activity.name
-            )
-            intent = Intent(Intent.ACTION_MAIN)
-
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-            intent.component = name
-
-
-        }
-
-        return intent
     }
 
 

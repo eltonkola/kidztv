@@ -4,9 +4,13 @@ package com.eltonkola.kidztv
 import android.app.Application
 import android.util.Log
 import androidx.room.Room
+import com.eltonkola.kidztv.data.AppManager
 import com.eltonkola.kidztv.data.db.AppDatabase
+import com.eltonkola.kidztv.ui.settings.pin.PinViewModel
+import org.koin.android.ext.android.startKoin
+import org.koin.androidx.viewmodel.ext.koin.viewModel
+import org.koin.dsl.module.module
 import timber.log.Timber
-
 import timber.log.Timber.DebugTree
 
 class MainApp : Application() {
@@ -15,7 +19,8 @@ class MainApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "app-data").build()
+        startKoin(this, listOf(appModule))
+
 
 
         if (BuildConfig.DEBUG) {
@@ -28,5 +33,22 @@ class MainApp : Application() {
             })
         }
     }
+
+
+    val appModule = module {
+
+        single { AppManager(get()) }
+
+        //room db for stats and app whitelist
+        single { Room.databaseBuilder(applicationContext, AppDatabase::class.java, "app-data").build() }
+//
+//        // Simple Presenter Factory, create one each time
+//        factory { MySimplePresenter(get()) }
+
+        // MyViewModel ViewModel
+        viewModel { PinViewModel(get()) }
+
+    }
+
 
 }

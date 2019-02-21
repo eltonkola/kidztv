@@ -74,7 +74,20 @@ dependencies {
     implementation 'androidx.room:room-rxjava2:2.1.0-alpha02'
     androidTestImplementation 'androidx.room:room-testing:2.1.0-alpha02'
     kapt 'androidx.room:room-compiler:2.1.0-alpha02'
-    
+
+//    // Koin for Android
+//    implementation "org.koin:koin-android:1.0.2"
+//    // Koin Android Scope feature
+//    implementation "org.koin:koin-android-scope:1.0.2"
+//    // Koin Android ViewModel feature
+//    implementation "org.koin:koin-android-viewmodel:1.0.2"
+
+    // AndroidX (based on koin-android)
+    // Koin AndroidX Scope feature
+    implementation "org.koin:koin-androidx-scope:1.0.2"
+    // Koin AndroidX ViewModel feature
+    implementation "org.koin:koin-androidx-viewmodel:1.0.2"
+
     // core
 //    implementation 'com.liulishuo.okdownload:okdownload:1.0.5'
 //// provide sqlite to store breakpoints
