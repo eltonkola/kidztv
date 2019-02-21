@@ -11,9 +11,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.eltonkola.kidztv.BuildConfig
 import com.eltonkola.kidztv.R
-import com.eltonkola.kidztv.ui.settings.about.AboutFragment
+import com.eltonkola.kidztv.ui.settings.appmanager.AppManagerFragment
 import com.eltonkola.kidztv.ui.settings.pin.PinFragment
-import com.eltonkola.kidztv.ui.settings.plugins.DownloadPluginsFragment
+import com.eltonkola.kidztv.ui.settings.stats.StatsFragment
 import com.eltonkola.kidztv.ui.settings.videomanager.VideoManagerFragment
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.util.*
@@ -46,14 +46,14 @@ class SettingsActivity : AppCompatActivity() {
             SettingsItem(
                 "App Manager",
                 ContextCompat.getDrawable(this, R.drawable.ic_view_comfy_black_24dp),
-                PinFragment()
+                AppManagerFragment()
             )
         )
         settingsItems.add(
             SettingsItem(
                 "Stats",
                 ContextCompat.getDrawable(this, R.drawable.ic_graphic_eq_black_24dp),
-                PinFragment()
+                StatsFragment()
             )
         )
         settingsItems.add(
@@ -89,7 +89,7 @@ class SettingsActivity : AppCompatActivity() {
             SettingsItem(
                 "Get plugins",
                 ContextCompat.getDrawable(this, R.drawable.ic_get_app_black_24dp),
-                DownloadPluginsFragment()
+                WebFragment.getFragment("Plugins", "file:///android_asset/plugins.html")
             )
         )
 
@@ -98,7 +98,7 @@ class SettingsActivity : AppCompatActivity() {
             SettingsItem(
                 "About (v. ${BuildConfig.VERSION_NAME})",
                 ContextCompat.getDrawable(this, R.drawable.ic_info_outline_black_24dp),
-                AboutFragment()
+                WebFragment.getFragment("About", "file:///android_asset/about.html")
             )
         )
 

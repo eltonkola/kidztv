@@ -10,4 +10,8 @@
 
 
     <string name="no_videos">No videos, please download your content, for more info, check the help section.</string>
+    <string name="network_error">Error loading page, make sure you are online, and try again. Click here to reload the page!
+    </string>
+
+
 </resources>

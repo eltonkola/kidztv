@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -69,6 +70,11 @@ dependencies {
 
     implementation 'com.github.aabhasr1:OtpView:1.0.5'
 
+    implementation 'androidx.room:room-runtime:2.1.0-alpha02'
+    implementation 'androidx.room:room-rxjava2:2.1.0-alpha02'
+    androidTestImplementation 'androidx.room:room-testing:2.1.0-alpha02'
+    kapt 'androidx.room:room-compiler:2.1.0-alpha02'
+    
     // core
 //    implementation 'com.liulishuo.okdownload:okdownload:1.0.5'
 //// provide sqlite to store breakpoints
