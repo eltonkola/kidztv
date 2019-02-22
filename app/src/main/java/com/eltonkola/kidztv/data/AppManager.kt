@@ -31,7 +31,7 @@ class AppManager(applicationContext: Context) {
 
     fun toSettingItem(app: ActivityInfo): SettingsActivity.SettingsItem {
         return SettingsActivity.SettingsItem(
-            app.loadLabel(pm).toString(),
+            app.loadLabel(pm).toString(), true,
             pm.getApplicationIcon(app.packageName),
             null,
             getIntentForPackge(app.packageName)

@@ -1,4 +1,4 @@
-package com.eltonkola.kidztv.ui.youtube
+package com.eltonkola.kidstv.yourtubedownloader
 
 import android.app.Activity
 import android.content.Intent
@@ -12,7 +12,6 @@ import android.widget.Toast
 import at.huber.youtubeExtractor.VideoMeta
 import at.huber.youtubeExtractor.YouTubeExtractor
 import at.huber.youtubeExtractor.YtFile
-import com.eltonkola.kidztv.R
 
 
 class DownloadActivity : Activity() {

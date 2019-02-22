@@ -20,7 +20,7 @@ import org.koin.android.ext.android.inject
 
 class SettingsActivity : AppCompatActivity() {
 
-    class SettingsItem(title: String, val icon: Drawable?, val fragment: Fragment? = null, val intent: Intent? = null) :
+    class SettingsItem(title: String, val external: Boolean, val icon: Drawable?, val fragment: Fragment? = null, val intent: Intent? = null) :
         MenuItem(title)
 
     open class MenuItem(val title: String) {
@@ -36,28 +36,28 @@ class SettingsActivity : AppCompatActivity() {
         settingsItems.add(MenuItem("App Settings"))
         settingsItems.add(
             SettingsItem(
-                "Video Manager",
+                "Video Manager", false,
                 ContextCompat.getDrawable(this, R.drawable.ic_subscriptions_black_24dp),
                 VideoManagerFragment()
             )
         )
         settingsItems.add(
             SettingsItem(
-                "App Manager",
+                "App Manager",false,
                 ContextCompat.getDrawable(this, R.drawable.ic_view_comfy_black_24dp),
                 AppManagerFragment()
             )
         )
         settingsItems.add(
             SettingsItem(
-                "Stats",
+                "Stats",false,
                 ContextCompat.getDrawable(this, R.drawable.ic_graphic_eq_black_24dp),
                 StatsFragment()
             )
         )
         settingsItems.add(
             SettingsItem(
-                "Pin code",
+                "Pin code",false,
                 ContextCompat.getDrawable(this, R.drawable.ic_security_black_24dp),
                 PinFragment()
             )
@@ -73,7 +73,7 @@ class SettingsActivity : AppCompatActivity() {
 
         settingsItems.add(
             SettingsItem(
-                "Get plugins",
+                "Get plugins",false,
                 ContextCompat.getDrawable(this, R.drawable.ic_get_app_black_24dp),
                 WebFragment.getFragment("Plugins", "file:///android_asset/plugins.html")
             )
@@ -82,7 +82,7 @@ class SettingsActivity : AppCompatActivity() {
         settingsItems.add(MenuItem("Other"))
         settingsItems.add(
             SettingsItem(
-                "About (v. ${BuildConfig.VERSION_NAME})",
+                "About (v. ${BuildConfig.VERSION_NAME})",false,
                 ContextCompat.getDrawable(this, R.drawable.ic_info_outline_black_24dp),
                 WebFragment.getFragment("About", "file:///android_asset/about.html")
             )

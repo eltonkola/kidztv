@@ -48,6 +48,13 @@ class MenuAdapter(
                 (item as SettingsActivity.SettingsItem).icon
             )
             holder.title.text = item.title
+
+            if(item.external){
+                holder.iconArrow.setImageResource(R.drawable.ic_call_made_24dp)
+            }else{
+                holder.iconArrow.setImageResource(R.drawable.ic_chevron_right_24dp)
+            }
+
             with(holder.itemView) {
                 tag = item
                 setOnClickListener(onClickListener)
@@ -60,6 +67,7 @@ class MenuAdapter(
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val icon: ImageView = view.icon
+        val iconArrow: ImageView = view.icon_arrow
         val title: TextView = view.title
     }
 

@@ -5,6 +5,7 @@ import android.app.Application
 import android.util.Log
 import androidx.room.Room
 import com.eltonkola.kidztv.data.AppManager
+import com.eltonkola.kidztv.data.SharedPreferencesManager
 import com.eltonkola.kidztv.data.db.AppDatabase
 import com.eltonkola.kidztv.ui.settings.pin.PinViewModel
 import org.koin.android.ext.android.startKoin
@@ -38,6 +39,10 @@ class MainApp : Application() {
     val appModule = module {
 
         single { AppManager(get()) }
+
+        single { SharedPreferencesManager(get()) }
+
+
 
         //room db for stats and app whitelist
         single { Room.databaseBuilder(applicationContext, AppDatabase::class.java, "app-data").build() }

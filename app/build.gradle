@@ -65,10 +65,8 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
 
-    implementation 'com.github.HaarigerHarald:android-youtubeExtractor:1.8.0'
+    implementation 'com.github.mukeshsolanki:android-otpview-pinview:2.0.3'
 
-
-    implementation 'com.github.aabhasr1:OtpView:1.0.5'
 
     implementation 'androidx.room:room-runtime:2.1.0-alpha02'
     implementation 'androidx.room:room-rxjava2:2.1.0-alpha02'

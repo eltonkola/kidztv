@@ -1,13 +1,10 @@
-package com.eltonkola.kidztv.ui.youtube
+package com.eltonkola.kidstv.yourtubedownloader
 
 import android.app.DownloadManager
 import android.app.IntentService
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Environment
-import com.eltonkola.kidztv.data.AppFolder
-import java.io.File
 
 class DownloadVideoService : IntentService("DownloadVideoService") {
 

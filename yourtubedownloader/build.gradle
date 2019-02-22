@@ -52,6 +52,13 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:' + rootProject.recyclerViewVersion
 
 
+    implementation 'com.github.HaarigerHarald:android-youtubeExtractor:1.8.0'
+
+    implementation "io.reactivex.rxjava2:rxandroid:${RXANDROID_VERSION}"
+    implementation "io.reactivex.rxjava2:rxjava:${RXJAVA_2_VERSION}"
+    implementation "io.reactivex.rxjava2:rxkotlin:${RXKOTLIN_VERSION}"
+
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 
 
     testImplementation 'junit:junit:4.12'

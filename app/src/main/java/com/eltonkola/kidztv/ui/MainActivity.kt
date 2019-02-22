@@ -1,6 +1,5 @@
 package com.eltonkola.kidztv.ui
 
-import `in`.aabhasjindal.otptextview.OTPListener
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Intent
@@ -15,9 +14,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eltonkola.kidztv.R
-import com.eltonkola.kidztv.ui.youtube.BrowseActivity
+import com.eltonkola.kidztv.ui.settings.SettingsActivity
 import com.eltonkola.kidztv.utils.SpacesItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         but_settings.setOnClickListener {
-            startActivity(Intent(this, BrowseActivity::class.java))
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
 
         vm.permissionState.observe(this, Observer {
@@ -93,23 +94,11 @@ class MainActivity : AppCompatActivity() {
         vm.checkPermissions(this)
 
 
-        otp_view.setOtpListener(object : OTPListener {
-            override fun onInteractionListener() {
+        otp_view.setOtpCompletionListener { otp ->
+            // do Stuff
+            Toast.makeText(this@MainActivity, "Error $otp, is the wrong code", Toast.LENGTH_SHORT).show()
 
-            }
-
-            override fun onOTPComplete(otp: String) {
-                if ("1234".contentEquals(otp)) {
-                    otp_view.showSuccess()
-                    Toast.makeText(this@MainActivity, "Done!!", Toast.LENGTH_SHORT).show()
-                } else {
-                    otp_view.showError()
-                    otp_view.otp = ""
-                    Toast.makeText(this@MainActivity, "Error $otp, is the wrong code", Toast.LENGTH_SHORT).show()
-
-                }
-            }
-        })
+        }
 
     }
 

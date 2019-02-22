@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center"
               android:orientation="horizontal">
@@ -10,14 +10,23 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_margin="@dimen/text_margin"
-            android:scaleType="centerCrop"
-            android:textAppearance="?attr/textAppearanceListItem"/>
+            android:scaleType="centerCrop"/>
 
     <TextView
             android:id="@+id/title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:textSize="14sp"
             android:textAppearance="?attr/textAppearanceListItem"/>
+
+    <ImageView
+            android:id="@+id/icon_arrow"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:alpha="0.8"
+            android:layout_margin="@dimen/text_margin"
+            android:scaleType="centerCrop"/>
+
 </LinearLayout>

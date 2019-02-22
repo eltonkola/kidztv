@@ -23,6 +23,7 @@ class ViewManagerViewModel(context: Application) : AndroidViewModel(context) {
 
     init {
         fileObserver = MyFileObserver(sdCardPath)
+        loadVideos()
     }
 
     fun loadVideos() {

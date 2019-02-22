@@ -82,7 +82,7 @@ class WebFragment : Fragment() {
                 }
             }
 
-        webview.setWebChromeClient(object : WebChromeClient() {
+        webview.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView, newProgress: Int) {
                 if (newProgress == 100) {
                     loading_view.visibility = View.GONE
@@ -90,7 +90,7 @@ class WebFragment : Fragment() {
                     loading_view.visibility = View.VISIBLE
                 }
             }
-        })
+        }
 
 
         url?.let {

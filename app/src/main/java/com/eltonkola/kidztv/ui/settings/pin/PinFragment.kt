@@ -4,33 +4,47 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.eltonkola.kidztv.R
-import kotlinx.android.synthetic.main.fragment_settings_video_manager.view.*
+import kotlinx.android.synthetic.main.fragment_settings_pin.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PinFragment : Fragment() {
 
+    private val vm: PinViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_settings_pin, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    val myViewModel: PinViewModel by viewModel()
+        setting_title.text = "Change pin: "
 
+        vm.pin.observe(this, Observer {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_settings_pin, container, false)
+            it?.let {
 
-        rootView.item_detail.text = "Change pin" + myViewModel.sayHello()
+                if (it.toIntOrNull() != null && it.toInt() > -1) {
+                    otp_view.hint =  it
+                    setting_title.text = "Change pin:  ${it}"
+                }else{
+                    otp_view.hint = ""
+                }
+            }
+        })
 
-        return rootView
+        but_reset.setOnClickListener {
+            vm.setPin("-1")
+        }
+
+        otp_view.setOtpCompletionListener { otp ->
+            vm.setPin(otp)
+            Toast.makeText(activity, "New pin updated to ${otp} !!", Toast.LENGTH_SHORT).show()
+        }
+
     }
-
 }

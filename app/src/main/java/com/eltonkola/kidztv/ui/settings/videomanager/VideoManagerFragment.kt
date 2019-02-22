@@ -57,7 +57,12 @@ class VideoManagerFragment : Fragment() {
             (video_list.adapter as EditVideoListAdapter).setVideoElements(videos)
         })
 
-        vm.loadVideos()
 
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        vm.loadVideos()
     }
 }
