@@ -6,15 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.eltonkola.kidztv.R
-import com.eltonkola.kidztv.ui.ViewManagerViewModel
 import kotlinx.android.synthetic.main.fragment_settings_video_manager.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VideoManagerFragment : Fragment() {
 
-    lateinit var vm: ViewManagerViewModel
+    private val vm: ViewManagerViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return  inflater.inflate(R.layout.fragment_settings_video_manager, container, false)
@@ -25,8 +25,6 @@ class VideoManagerFragment : Fragment() {
 
         setting_titles.text = "Video Manager"
 
-        vm = ViewModelProviders.of(this).get(ViewManagerViewModel::class.java)
-
         vm.loading.observe(this, Observer { isLoading ->
             if (isLoading) {
                 loading.visibility = View.VISIBLE
@@ -35,7 +33,7 @@ class VideoManagerFragment : Fragment() {
             }
         })
 
-        video_list.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        video_list.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         video_list.setHasFixedSize(true)
 
         video_list.adapter = EditVideoListAdapter(activity!!) { video ->
@@ -55,6 +53,6 @@ class VideoManagerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        vm.loadVideos()
+        vm.reloadVideos()
     }
 }

@@ -40,15 +40,20 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
 
-                <!-- start - this is for google app indexing -->
-                <action android:name="android.intent.action.VIEW" />
+                <!-- this is ann app launcher -->
+                <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+
+
+                <!-- start - this is for google app indexing -->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
 
                 <!-- Accepts URIs that begin with "kidztv://launcher" -->
-                <data
-                    android:host="launcher"
-                    android:scheme="kidztv"  />
+                <!--<data-->
+                    <!--android:host="launcher"-->
+                    <!--android:scheme="kidztv"  />-->
                 <!-- end - this is for google app indexing -->
 
             </intent-filter>

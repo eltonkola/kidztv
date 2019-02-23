@@ -94,4 +94,8 @@ dependencies {
 //// and then please import okhttp dependencies by yourself
 //    implementation 'com.liulishuo.okdownload:okhttp:1.0.5'
 
+
+    //worst thing on earth!
+    compile 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
+
 }

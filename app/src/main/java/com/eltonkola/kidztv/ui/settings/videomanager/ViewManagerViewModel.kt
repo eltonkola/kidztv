@@ -1,33 +1,24 @@
-package com.eltonkola.kidztv.ui
+package com.eltonkola.kidztv.ui.settings.videomanager
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import com.eltonkola.kidztv.data.AppFolder
+import androidx.lifecycle.ViewModel
 import com.eltonkola.kidztv.data.MyFileObserver
+import com.eltonkola.kidztv.data.VideoManager
 import com.eltonkola.kidztv.model.VideoElement
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
-import java.io.File
 
-
-class ViewManagerViewModel(context: Application) : AndroidViewModel(context) {
-
-    val sdCardPath: String get() = AppFolder().sdCardPath
+class ViewManagerViewModel(private val context: Context,
+                           private val videoManager: VideoManager) : ViewModel() {
 
     val loading = MutableLiveData<Boolean>()
     var videos = MutableLiveData<List<VideoElement>>()
     private val compositeDisposable = CompositeDisposable()
 
-    val fileObserver: MyFileObserver
-
     init {
-        fileObserver = MyFileObserver(sdCardPath)
-        loadVideos()
-    }
-
-    fun loadVideos() {
-        loading.postValue(true)
+        val fileObserver = MyFileObserver(videoManager.sdCardPath)
         compositeDisposable.add(fileObserver.observable
             .subscribe(
                 { path ->
@@ -36,17 +27,20 @@ class ViewManagerViewModel(context: Application) : AndroidViewModel(context) {
                 },
                 { t ->
                     Timber.e(t)
-                    loading.postValue(false)
                 }
             ))
         reloadVideos()
     }
 
-    private fun reloadVideos() {
-        videos.postValue(File(sdCardPath).walkTopDown().filter { !it.isDirectory }.toList().map { VideoElement(it) })
-        loading.postValue(false)
+    fun reloadVideos() {
+        loading.postValue(true)
+        compositeDisposable.add(videoManager.loadVideos().subscribe({
+            videos.postValue(it)
+            loading.postValue(false)
+        },{
+            loading.postValue(false)
+        }))
     }
-
 
     public override fun onCleared() {
         compositeDisposable.dispose()
@@ -55,15 +49,13 @@ class ViewManagerViewModel(context: Application) : AndroidViewModel(context) {
 
     fun deleteFile(element: VideoElement) {
         loading.postValue(true)
-        val file = File(element.file.getPath())
-        file.delete()
-        if (file.exists()) {
-            file.getCanonicalFile().delete()
-            if (file.exists()) {
-                getApplication<Application>().deleteFile(file.getName())
-            }
-        }
-        reloadVideos()
+        compositeDisposable.add(videoManager.deleteFile(element).subscribe({
+            reloadVideos()
+        },{
+            Toast.makeText(context, "Error deleting video ${element.file.name}", Toast.LENGTH_SHORT).show()
+            loading.postValue(false)
+        }))
+
     }
 
 

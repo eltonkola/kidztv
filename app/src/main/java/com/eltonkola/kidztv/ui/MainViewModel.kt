@@ -5,10 +5,7 @@ import android.content.Intent
 import android.os.Environment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.eltonkola.kidztv.data.AppFolder
-import com.eltonkola.kidztv.data.AppManager
-import com.eltonkola.kidztv.data.MyFileObserver
-import com.eltonkola.kidztv.data.SharedPreferencesManager
+import com.eltonkola.kidztv.data.*
 import com.eltonkola.kidztv.model.AppElement
 import com.eltonkola.kidztv.model.VideoElement
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -16,8 +13,9 @@ import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import java.io.File
 
-class MainViewModel (val sharedPreferencesManager : SharedPreferencesManager,
-                     private val appManager: AppManager
+class MainViewModel (private val sharedPreferencesManager : SharedPreferencesManager,
+                     private val appManager: AppManager,
+                     private val videoManager: VideoManager
 ) : ViewModel() {
 
     val permissionState = MutableLiveData<PermissionState>()
@@ -28,23 +26,16 @@ class MainViewModel (val sharedPreferencesManager : SharedPreferencesManager,
         PERMISSION_KO
     }
 
-    val sdCardPath: String get() = AppFolder().sdCardPath
 
     val loading = MutableLiveData<Boolean>()
     var videos = MutableLiveData<List<VideoElement>>()
     private val compositeDisposable = CompositeDisposable()
 
-
-
     val loading_apps = MutableLiveData<Boolean>()
     var apps = MutableLiveData<List<AppElement>>()
 
-
-    val fileObserver: MyFileObserver
-
     init {
-        fileObserver = MyFileObserver(sdCardPath)
-        loading.postValue(true)
+        val fileObserver = MyFileObserver(videoManager.sdCardPath)
         loading_apps.postValue(true)
 
         compositeDisposable.add(appManager.getWhitelistedApps().subscribe({
@@ -53,9 +44,6 @@ class MainViewModel (val sharedPreferencesManager : SharedPreferencesManager,
         },{
             loading_apps.postValue(false)
         }))
-    }
-
-    fun loadVideos() {
 
         compositeDisposable.add(fileObserver.observable
             .subscribe(
@@ -67,11 +55,20 @@ class MainViewModel (val sharedPreferencesManager : SharedPreferencesManager,
                     Timber.e(t)
                 }
             ))
-        reloadVideos()
     }
 
-    private fun reloadVideos() {
-        videos.postValue(File(sdCardPath).walkTopDown().filter { !it.isDirectory }.toList().map { VideoElement(it) })
+    fun reloadVideos() {
+        loading.postValue(true)
+//        videos.postValue(videoManager.getVideos())
+//        loading.postValue(false)
+
+        compositeDisposable.add(videoManager.loadVideos().subscribe({
+            videos.postValue(it)
+            loading.postValue(false)
+        },{
+            it.printStackTrace()
+            loading.postValue(false)
+        }))
     }
 
 
