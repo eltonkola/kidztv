@@ -11,21 +11,24 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eltonkola.kidztv.R
 import com.eltonkola.kidztv.ui.settings.SettingsActivity
 import com.eltonkola.kidztv.utils.SpacesItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
-
-
+import kotlinx.android.synthetic.main.activity_main_apps.*
+import kotlinx.android.synthetic.main.activity_main_lock.*
+import kotlinx.android.synthetic.main.activity_main_sidebar.*
+import kotlinx.android.synthetic.main.fragment_settings_pin.view.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : AppCompatActivity() {
 
     private var mVisible: Boolean = true
 
-    lateinit var vm: MainViewModel
+    private val vm: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +42,6 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         video_player.setOnClickListener { toggle() }
-
-        vm = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         vm.loading.observe(this, Observer { loading ->
             Toast.makeText(this, "Loading: $loading", Toast.LENGTH_SHORT).show()
@@ -68,12 +69,66 @@ class MainActivity : AppCompatActivity() {
             (video_grid.adapter as VideoListAdapter).setVideoElements(videos)
         })
 
+        vm.loading_apps.observe(this, Observer { loadingApps ->
+            if(loadingApps){
+                loading_apps.visibility = View.VISIBLE
+            }else{
+                loading_apps.visibility = View.GONE
+            }
+        })
+
+
+        app_grid.layoutManager = GridLayoutManager(this, 6)
+        app_grid.setHasFixedSize(true)
+
+        app_grid.adapter = AppGridAdapter(this) { app ->
+            startActivity(vm.openApp(app))
+        }
+
+        vm.apps.observe(this, Observer { apps ->
+            if(apps.isEmpty()){
+                no_apps.visibility = View.VISIBLE
+            }else {
+                no_apps.visibility = View.GONE
+                (app_grid.adapter as AppGridAdapter).setData(apps)
+            }
+        })
+
         video_player.setOnPreparedListener {
             video_player.start()
         }
 
+        otp_view.setOtpCompletionListener { otp ->
+
+            if(otp != null && vm.isPinCorrect(otp)) {
+                root_lock.visibility =  View.GONE
+                otp_view.setText("")
+                startActivity(Intent(this, SettingsActivity::class.java))
+            }else {
+                Toast.makeText(this@MainActivity, "Error $otp, is the wrong code", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         but_settings.setOnClickListener {
-            startActivity(Intent(this, SettingsActivity::class.java))
+
+                if(vm.isPinSet()){
+                    if(root_lock.visibility == View.VISIBLE){
+                        root_lock.visibility =  View.GONE
+                    }else{
+                        root_lock.visibility =  View.VISIBLE
+                    }
+                }else{
+                    startActivity(Intent(this, SettingsActivity::class.java))
+
+                }
+        }
+
+        but_apps.setOnClickListener {
+            if(root_apps.visibility == View.VISIBLE){
+                root_apps.visibility =  View.GONE
+            }else{
+                root_apps.visibility =  View.VISIBLE
+            }
         }
 
         vm.permissionState.observe(this, Observer {
@@ -94,11 +149,6 @@ class MainActivity : AppCompatActivity() {
         vm.checkPermissions(this)
 
 
-        otp_view.setOtpCompletionListener { otp ->
-            // do Stuff
-            Toast.makeText(this@MainActivity, "Error $otp, is the wrong code", Toast.LENGTH_SHORT).show()
-
-        }
 
     }
 

@@ -1,5 +1,6 @@
 package com.eltonkola.kidztv.ui.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -75,6 +76,13 @@ class SettingsActivity : AppCompatActivity() {
         )
 
         settingsItems.add(BaseMenuItem("Other"))
+        settingsItems.add(
+            SettingsMenuItem(
+                "System settings", true,
+                ContextCompat.getDrawable(this, R.drawable.ic_settings_24dp),
+                null, Intent(android.provider.Settings.ACTION_SETTINGS)
+            )
+        )
         settingsItems.add(
             SettingsMenuItem(
                 "About (v. ${BuildConfig.VERSION_NAME})", false,

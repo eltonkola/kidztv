@@ -34,7 +34,7 @@ class AppManagerFragment : Fragment() {
         app_list.setHasFixedSize(true)
 
         activity?.let {
-            app_list.adapter = AppListAdapter(it, true) { app ->
+            app_list.adapter = SettingsAppListAdapter(it, true) { app ->
                 vm.removeApp(app)
             }
         }
@@ -47,7 +47,7 @@ class AppManagerFragment : Fragment() {
         })
 
         vm.apps.observe(this, Observer { data ->
-            (app_list.adapter as AppListAdapter).setData(data)
+            (app_list.adapter as SettingsAppListAdapter).setData(data)
 
             if(data.isEmpty()){
                 no_apps.visibility = View.VISIBLE

@@ -1,24 +1,22 @@
-package com.eltonkola.kidztv.ui.settings.appmanager
+package com.eltonkola.kidztv.ui
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.eltonkola.kidztv.R
 import com.eltonkola.kidztv.model.AppElement
-import java.text.SimpleDateFormat
 
+class AppGridAdapter constructor(context: Context, val onAction: (AppElement) -> Unit) :
 
-class AppListAdapter constructor(context: Context, val editMode: Boolean, val onAction: (AppElement) -> Unit) :
-    RecyclerView.Adapter<AppListAdapter.WordViewHolder>() {
+    RecyclerView.Adapter<AppGridAdapter.WordViewHolder>() {
 
     private val inflater = LayoutInflater.from(context)
     private var data: List<AppElement> = emptyList()
-    var sdf = SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS")
+
     override fun getItemCount(): Int {
         return data.size
     }
@@ -27,34 +25,16 @@ class AppListAdapter constructor(context: Context, val editMode: Boolean, val on
 
         private val appIcon: ImageView = itemView.findViewById(R.id.app_icon)
         private val title: TextView = itemView.findViewById(R.id.title)
-        private val subtitle: TextView = itemView.findViewById(R.id.subtitle)
-
-        private val butDelete: ImageButton = itemView.findViewById(R.id.but_delete)
-        private val butAdd: ImageButton = itemView.findViewById(R.id.but_add)
-
 
         fun bind(elem: AppElement) {
             title.text = elem.title
-
-
-            if(editMode){
-                subtitle.text = "Added: ${sdf.format(elem.dbModel.enabledDate)}"
-                butDelete.visibility = View.VISIBLE
-                butAdd.visibility = View.GONE
-                butDelete.setOnClickListener { onAction.invoke(elem) }
-            }else{
-                subtitle.text = "Added: ${elem.dbModel.packageName}"
-                butDelete.visibility = View.GONE
-                butAdd.visibility = View.VISIBLE
-                butAdd.setOnClickListener { onAction.invoke(elem) }
-            }
-
             appIcon.setImageDrawable(elem.icon)
+            itemView.setOnClickListener { onAction.invoke(elem) }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
-        val itemView = inflater.inflate(R.layout.item_app_edit, parent, false)
+        val itemView = inflater.inflate(R.layout.item_app, parent, false)
         return WordViewHolder(itemView)
     }
 

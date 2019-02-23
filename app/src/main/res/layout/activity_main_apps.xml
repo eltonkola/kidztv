@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#99000000"
+                android:id="@+id/root_apps"
+                android:gravity="center"
+                android:visibility="gone"
+                tools:context=".ui.MainActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/app_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"/>
+
+
+    <ProgressBar android:layout_width="wrap_content"
+                 android:id="@+id/loading_apps"
+                 android:indeterminate="true"
+                 android:layout_centerInParent="true"
+                 android:layout_height="wrap_content"/>
+
+    <TextView android:layout_width="wrap_content"
+              android:id="@+id/no_apps"
+              android:padding="20dp"
+              android:text="@string/no_apps"
+              android:visibility="gone"
+              android:layout_centerInParent="true"
+              android:layout_height="wrap_content"/>
+
+
+</RelativeLayout>

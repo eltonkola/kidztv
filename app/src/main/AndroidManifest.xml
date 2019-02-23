@@ -15,19 +15,20 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:fullBackupContent="true">
+
         <activity
                 android:name=".ui.settings.SettingsActivity"
                 android:label="@string/app_name"
                 android:screenOrientation="sensorLandscape"
-
                 android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN"/>-->
+                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+            <!--</intent-filter>-->
         </activity>
+
         <activity
                 android:name=".ui.MainActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
@@ -35,13 +36,23 @@
                 android:screenOrientation="sensorLandscape"
                 android:theme="@style/FullscreenTheme">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN"/>
+                <!-- this is an app -->
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
 
-            <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+                <!-- start - this is for google app indexing -->
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Accepts URIs that begin with "kidztv://launcher" -->
+                <data
+                    android:host="launcher"
+                    android:scheme="kidztv"  />
+                <!-- end - this is for google app indexing -->
+
             </intent-filter>
         </activity>
-
-
 
 
     </application>

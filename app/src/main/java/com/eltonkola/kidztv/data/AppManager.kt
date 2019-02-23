@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.pm.ResolveInfo
 import com.eltonkola.kidztv.data.db.AppDatabase
 import com.eltonkola.kidztv.model.AppElement
 import com.eltonkola.kidztv.model.settings.SettingsMenuItem
@@ -14,11 +13,10 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import com.eltonkola.kidztv.model.db.UserApp
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
-import io.reactivex.Single
-import timber.log.Timber
 import java.lang.Exception
 
 
@@ -55,7 +53,7 @@ class AppManager(applicationContext: Context, private val appDatabase: AppDataba
             app.loadLabel(pm).toString(), true,
             pm.getApplicationIcon(app.packageName),
             null,
-            getIntentForPackage(app.packageName)
+            getIntentForPackageForPlugin(app.packageName)
         )
     }
 
@@ -63,7 +61,11 @@ class AppManager(applicationContext: Context, private val appDatabase: AppDataba
     /*
    * get app launch intent
    * */
-    private fun getIntentForPackage(packageName: String): Intent {
+    fun getIntentForPackage(packageName: String): Intent {
+        return pm.getLaunchIntentForPackage(packageName)
+    }
+
+    fun getIntentForPackageForPlugin(packageName: String): Intent {
         var intent = Intent()
         intent.setPackage(packageName)
 
@@ -83,7 +85,6 @@ class AppManager(applicationContext: Context, private val appDatabase: AppDataba
             intent.component = name
 
         }
-
         return intent
     }
 

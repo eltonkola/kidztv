@@ -7,6 +7,7 @@ import androidx.room.Room
 import com.eltonkola.kidztv.data.AppManager
 import com.eltonkola.kidztv.data.SharedPreferencesManager
 import com.eltonkola.kidztv.data.db.AppDatabase
+import com.eltonkola.kidztv.ui.MainViewModel
 import com.eltonkola.kidztv.ui.settings.appmanager.AppManagerViewModel
 import com.eltonkola.kidztv.ui.settings.appmanager.add.AddAppsViewModel
 import com.eltonkola.kidztv.ui.settings.pin.PinViewModel
@@ -58,6 +59,8 @@ class MainApp : Application() {
         viewModel { AppManagerViewModel(get()) }
 
         viewModel { AddAppsViewModel(get()) }
+
+        viewModel { MainViewModel(get(), get() ) }
 
 
     }

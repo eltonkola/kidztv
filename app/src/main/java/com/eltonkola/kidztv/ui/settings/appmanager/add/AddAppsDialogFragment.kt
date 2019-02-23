@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eltonkola.kidztv.R
-import com.eltonkola.kidztv.ui.settings.appmanager.AppListAdapter
+import com.eltonkola.kidztv.ui.settings.appmanager.SettingsAppListAdapter
 import com.eltonkola.kidztv.ui.settings.appmanager.AppManagerFragment
 import kotlinx.android.synthetic.main.fragment_settings_app_manager_add.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -45,13 +45,13 @@ class AddAppsDialogFragment : DialogFragment() {
 
 
         activity?.let {
-            app_list.adapter = AppListAdapter(it, false) { app ->
+            app_list.adapter = SettingsAppListAdapter(it, false) { app ->
                 (targetFragment as AppManagerFragment).addApp(app)
             }
         }
 
         vm.apps.observe(this, Observer { data ->
-            (app_list.adapter as AppListAdapter).setData(data)
+            (app_list.adapter as SettingsAppListAdapter).setData(data)
 
             if(data.isEmpty()){
                 no_apps.visibility = View.VISIBLE

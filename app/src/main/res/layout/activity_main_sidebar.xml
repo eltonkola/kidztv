@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+               android:layout_width="140dp"
+               android:id="@+id/top_bar"
+               android:layout_height="match_parent"
+               android:background="#85000000"
+               android:orientation="vertical"
+               android:weightSum="3"
+              tools:context=".ui.MainActivity">
+
+
+            <ImageView android:layout_width="match_parent"
+                       android:layout_height="100dp"
+                       android:id="@+id/logo"
+                       android:paddingLeft="4dp"
+                       android:scaleType="centerCrop"
+                       android:src="@mipmap/ic_launcher"
+                       android:layout_marginBottom="6dp"
+
+            />
+
+
+            <Button android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/but_timer"
+                    android:text="Timer"
+                    android:drawableTop="@drawable/ic_timer_24dp"
+            />
+
+
+            <Button android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/but_settings"
+                    android:text="Settings"
+                    android:drawableTop="@drawable/ic_settings_24dp"
+            />
+
+            <Button android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/but_apps"
+                    android:text="Apps"
+                    android:drawableTop="@drawable/ic_apps_24dp"
+            />
+
+        </LinearLayout>
