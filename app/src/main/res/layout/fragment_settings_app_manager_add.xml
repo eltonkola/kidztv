@@ -20,7 +20,7 @@
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Below is the list of apps and games you kid can open from the main ui."
+                android:text="Select an app/game to add to the whitelist."
         />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -33,8 +33,8 @@
 
         <Button android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/but_add_app"
-                android:text="Add app/game to whitelist"
+                android:id="@+id/but_close"
+                android:text="Close"
                 />
 
     </LinearLayout>
@@ -45,9 +45,9 @@
                  android:layout_height="wrap_content"/>
 
     <TextView android:layout_width="wrap_content"
-              android:id="@+id/no_videos"
+              android:id="@+id/no_apps"
               android:padding="20dp"
-              android:text="@string/no_apps"
+              android:text="@string/no_apps_add"
               android:visibility="gone"
               android:layout_centerInParent="true"
               android:layout_height="wrap_content"/>

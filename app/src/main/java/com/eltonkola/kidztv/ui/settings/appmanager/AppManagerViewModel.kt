@@ -15,14 +15,49 @@ class AppManagerViewModel(private val appManager: AppManager) : ViewModel() {
     var apps = MutableLiveData<List<AppElement>>()
     private val compositeDisposable = CompositeDisposable()
 
+    val addOperation = MutableLiveData<EditState>()
+
+    enum class EditState {
+        ADD_OK, ADD_ERROR, REMOVE_OK, REMOVE_ERROR, IDLE
+    }
+
+    fun setOperationReflected(){
+        addOperation.postValue(EditState.IDLE)
+    }
+
     init {
 
+        loading.postValue(true)
         compositeDisposable.add(appManager.getWhitelistedApps().subscribe({
-
+            loading.postValue(true)
+            apps.postValue(it)
         }, {
             Timber.e(it)
+            loading.postValue(false)
         }))
 
+    }
+
+
+    public override fun onCleared() {
+        compositeDisposable.dispose()
+        super.onCleared()
+    }
+
+    fun addApp(app: AppElement) {
+        compositeDisposable.add(appManager.addAppToWhitelist(app).subscribe({
+            addOperation.postValue(EditState.ADD_OK)
+        }, {
+            addOperation.postValue(EditState.ADD_ERROR)
+        }))
+    }
+
+    fun removeApp(app: AppElement) {
+        compositeDisposable.add(appManager.removeAppFromWhitelist(app).subscribe({
+            addOperation.postValue(EditState.REMOVE_OK)
+        }, {
+            addOperation.postValue(EditState.REMOVE_ERROR)
+        }))
 
     }
 

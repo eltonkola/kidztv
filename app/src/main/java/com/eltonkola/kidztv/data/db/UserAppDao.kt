@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.eltonkola.kidztv.model.db.UserApp
+import io.reactivex.Completable
 import io.reactivex.Flowable
 
 @Dao
@@ -26,10 +27,13 @@ interface UserAppDao {
 //    )
 //    fun findByValues(packageName: String, enabled: Boolean): UserApp
 
+//    @Insert
+//    fun insertAll(vararg userapps: UserApp)
+
     @Insert
-    fun insertAll(vararg userapps: UserApp)
+    fun insert(app: UserApp) : Completable
 
     @Delete
-    fun delete(userapp: UserApp)
+    fun delete(app: UserApp) : Completable
 }
 

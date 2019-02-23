@@ -13,5 +13,8 @@
     <string name="network_error">Error loading page, make sure you are online, and try again. Click here to reload the page!
     </string>
 
+    <string name="no_apps">No apps or games whitelisted yet. Your kid will not have an app launcher.</string>
+    <string name="no_apps_add">No more apps or games can be added to the whitelist!.</string>
+
 
 </resources>

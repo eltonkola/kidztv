@@ -8,6 +8,7 @@ import com.eltonkola.kidztv.data.AppManager
 import com.eltonkola.kidztv.data.SharedPreferencesManager
 import com.eltonkola.kidztv.data.db.AppDatabase
 import com.eltonkola.kidztv.ui.settings.appmanager.AppManagerViewModel
+import com.eltonkola.kidztv.ui.settings.appmanager.add.AddAppsViewModel
 import com.eltonkola.kidztv.ui.settings.pin.PinViewModel
 import org.koin.android.ext.android.startKoin
 import org.koin.androidx.viewmodel.ext.koin.viewModel
@@ -55,6 +56,8 @@ class MainApp : Application() {
         viewModel { PinViewModel(get()) }
 
         viewModel { AppManagerViewModel(get()) }
+
+        viewModel { AddAppsViewModel(get()) }
 
 
     }
