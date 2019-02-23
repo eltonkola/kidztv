@@ -18,7 +18,7 @@ class AddAppsViewModel(private val appManager: AppManager) : ViewModel() {
 
         loading.postValue(true)
         compositeDisposable.add(appManager.getAddableApps().subscribe({
-            loading.postValue(true)
+            loading.postValue(false)
             apps.postValue(it)
         }, {
             Timber.e(it)

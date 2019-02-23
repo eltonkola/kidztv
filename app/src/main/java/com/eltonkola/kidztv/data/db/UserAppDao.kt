@@ -10,9 +10,9 @@ import io.reactivex.Flowable
 
 @Dao
 interface UserAppDao {
+
     @Query("SELECT * FROM userapp")
     fun getAll(): List<UserApp>
-
 
     @Query("SELECT * FROM userapp")
     fun getAllRx(): Flowable<List<UserApp>>

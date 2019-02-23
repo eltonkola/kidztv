@@ -15,8 +15,10 @@ import java.util.*
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import com.eltonkola.kidztv.model.db.UserApp
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.Single
+import timber.log.Timber
 import java.lang.Exception
 
 
@@ -91,13 +93,40 @@ class AppManager(applicationContext: Context, private val appDatabase: AppDataba
 
     fun getWhitelistedApps(): Flowable<List<AppElement>> {
         return appDatabase.userAppDao().getAllRx()
-            .flatMapIterable { it }
-            .map { dbModelToAppElement(it) }
-            .toList()
-            .toFlowable()
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
+            .map { it.map { dbModelToAppElement(it) }  }
     }
+
+//    fun getWhitelistedApps(): Flowable<List<AppElement>> {
+//        return appDatabase.userAppDao().getAllRx()
+//            .flatMapIterable { it }
+//            .map { dbModelToAppElement(it) }
+//            .toList()
+//            .toFlowable()
+//            .subscribeOn(Schedulers.newThread())
+//            .observeOn(AndroidSchedulers.mainThread())
+//    }
+
+//    fun getWhitelistedApps(): Flowable<List<AppElement>> {
+//     return Flowable.create<List<AppElement>>({ emitter ->
+//
+//         appDatabase.userAppDao().getAllRx()
+//             .subscribeOn(Schedulers.newThread())
+//             .observeOn(AndroidSchedulers.mainThread())
+//             .subscribe({
+//                 emitter.onNext(it.map { dbModelToAppElement(it) })
+//             },{
+//                 emitter.onError(it)
+//             })
+//
+//
+//
+//     }, BackpressureStrategy.LATEST)
+//         .subscribeOn(Schedulers.newThread())
+//         .observeOn(AndroidSchedulers.mainThread())
+//
+//    }
 
 
     private fun getPackageInfoByName(packageName: String): ApplicationInfo? {
@@ -116,7 +145,7 @@ class AppManager(applicationContext: Context, private val appDatabase: AppDataba
 
     fun addAppToWhitelist(app: AppElement): Completable {
         return appDatabase.userAppDao()
-            .insert(app.toDbModel())
+            .insert(app.dbModel)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
     }
@@ -124,39 +153,57 @@ class AppManager(applicationContext: Context, private val appDatabase: AppDataba
     /*
        all apps i can add, not already on db
     */
+    //all apps take long to load icons, so will cache them
+    //TODO add event listener for package install/remove to invalidate this list
+    val allapps = mutableListOf<AppElement>()
 
-    fun getAddableApps(): Single<List<AppElement>> {
-        return Single.create<List<AppElement>> { task ->
+    private fun getAllApps(){
+        if(allapps.isEmpty()){
+            val intent = Intent(Intent.ACTION_MAIN, null)
+            intent.addCategory(Intent.CATEGORY_LAUNCHER)
+            val apps = pm.queryIntentActivities(intent, 0)
+            allapps.addAll(apps.map {toAppElement(it.activityInfo) })
+        }
+    }
+
+    fun getAddableApps(): Flowable<List<AppElement>> {
+        return Flowable.create<List<AppElement>> ({ task ->
             try {
+                //load all installed app, if not in cache
+                getAllApps()
+                val plugins = getPlugins().map { toAppElement(it) }
 
-                val intent = Intent(Intent.ACTION_MAIN, null)
-                intent.addCategory(Intent.CATEGORY_LAUNCHER)
-                val allapps = pm.queryIntentActivities(intent, 0)
-                val plugins = getPlugins()
-                val allAddedApps = appDatabase.userAppDao().getAll().map { dbModelToAppElement(it) }
-                val allNotPluginApps = allapps.map { it.activityInfo }.filter { !plugins.contains(it) }
-                val allAppsWeCanAdd = allNotPluginApps.filter { app ->
-                    allAddedApps.filter { it.packageName == app.packageName }.isEmpty()
-                }.map { toAppElement(it) }
+                appDatabase.userAppDao()
+                    .getAllRx()
+                    .map { it.map { dbModelToAppElement(it)}}
+                    .subscribe({ allAddedApps ->
 
-                task.onSuccess(allAppsWeCanAdd)
+                        val allNotPluginApps = allapps.filter { !plugins.contains(it) }
+                        val allAppsWeCanAdd = allNotPluginApps.filter { app ->
+                            allAddedApps.none { it.packageName == app.packageName }
+                        }
+
+                        task.onNext(allAppsWeCanAdd)
+
+                    },{
+                        task.onError(it)
+                    })
 
             } catch (e: Exception) {
                 task.onError(e)
             }
-        }.subscribeOn(Schedulers.newThread())
+        }, BackpressureStrategy.LATEST).subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 
     }
 
     fun dbModelToAppElement(app: UserApp): AppElement {
-        val ai = getPackageInfoByName(app.packageName!!)
+        val ai = getPackageInfoByName(app.packageName)
         return AppElement(
             app.packageName,
             getAppName(ai),
             pm.getApplicationIcon(app.packageName),
-            getIntentForPackage(app.packageName!!),
-            app.enabledDate!!
+            app
         )
     }
 
@@ -164,14 +211,13 @@ class AppManager(applicationContext: Context, private val appDatabase: AppDataba
         return AppElement(app.packageName,
             app.loadLabel(pm).toString(),
             pm.getApplicationIcon(app.packageName),
-            getIntentForPackage(app.packageName),
-            Date()
+            UserApp(app.packageName, Date())
         )
     }
 
     fun removeAppFromWhitelist(app: AppElement): Completable {
         return appDatabase.userAppDao()
-            .delete(app.toDbModel())
+            .delete(app.dbModel)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
     }

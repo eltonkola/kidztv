@@ -29,7 +29,7 @@ class AppManagerViewModel(private val appManager: AppManager) : ViewModel() {
 
         loading.postValue(true)
         compositeDisposable.add(appManager.getWhitelistedApps().subscribe({
-            loading.postValue(true)
+            loading.postValue(false)
             apps.postValue(it)
         }, {
             Timber.e(it)
@@ -48,6 +48,7 @@ class AppManagerViewModel(private val appManager: AppManager) : ViewModel() {
         compositeDisposable.add(appManager.addAppToWhitelist(app).subscribe({
             addOperation.postValue(EditState.ADD_OK)
         }, {
+            it.printStackTrace()
             addOperation.postValue(EditState.ADD_ERROR)
         }))
     }

@@ -7,7 +7,10 @@ import java.util.*
 
 @Entity
 data class UserApp(
-    @PrimaryKey(autoGenerate = true) var uid: Int = 0,
     @ColumnInfo(name = "packageName") var packageName: String,
     @ColumnInfo(name = "enabled_date") var enabledDate: Date
-)
+){
+
+    @PrimaryKey(autoGenerate = true) var uid: Int = 0
+
+}

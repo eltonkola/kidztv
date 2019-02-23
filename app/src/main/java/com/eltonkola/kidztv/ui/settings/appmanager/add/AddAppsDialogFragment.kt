@@ -52,6 +52,12 @@ class AddAppsDialogFragment : DialogFragment() {
 
         vm.apps.observe(this, Observer { data ->
             (app_list.adapter as AppListAdapter).setData(data)
+
+            if(data.isEmpty()){
+                no_apps.visibility = View.VISIBLE
+            }else{
+                no_apps.visibility = View.GONE
+            }
         })
 
         vm.loading.observe(this, Observer { isLoading ->

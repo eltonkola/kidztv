@@ -48,23 +48,30 @@ class AppManagerFragment : Fragment() {
 
         vm.apps.observe(this, Observer { data ->
             (app_list.adapter as AppListAdapter).setData(data)
+
+            if(data.isEmpty()){
+                no_apps.visibility = View.VISIBLE
+            }else{
+                no_apps.visibility = View.GONE
+            }
+
         })
         vm.addOperation.observe(this, Observer {
             when(it){
-                AppManagerViewModel.EditState.ADD_OK-> {
+                AppManagerViewModel.EditState.ADD_ERROR -> {
                     Toast.makeText(activity, "Error adding app", Toast.LENGTH_SHORT).show()
                     vm.setOperationReflected()
                 }
-                AppManagerViewModel.EditState.ADD_ERROR-> {
+                AppManagerViewModel.EditState.ADD_OK-> {
                     Toast.makeText(activity, "App saved to the white list", Toast.LENGTH_SHORT).show()
                     vm.setOperationReflected()
                 }
                 AppManagerViewModel.EditState.REMOVE_OK -> {
-                    Toast.makeText(activity, "Error removing app", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "App removed from the white list", Toast.LENGTH_SHORT).show()
                     vm.setOperationReflected()
                 }
                 AppManagerViewModel.EditState.REMOVE_ERROR-> {
-                    Toast.makeText(activity, "App removed from the white list", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "Error removing app", Toast.LENGTH_SHORT).show()
                     vm.setOperationReflected()
                 }
                 AppManagerViewModel.EditState.IDLE -> {
@@ -83,6 +90,7 @@ class AppManagerFragment : Fragment() {
                 }
                 ft.addToBackStack(null)
                 val newFragment = AddAppsDialogFragment.newInstance()
+                newFragment.setTargetFragment(this, 1001)
                 newFragment.show(ft, ADD_APPS_TAG)
             }
         }
