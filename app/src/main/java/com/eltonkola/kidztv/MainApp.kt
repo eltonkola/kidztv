@@ -7,6 +7,7 @@ import androidx.room.Room
 import com.eltonkola.kidztv.data.AppManager
 import com.eltonkola.kidztv.data.SharedPreferencesManager
 import com.eltonkola.kidztv.data.db.AppDatabase
+import com.eltonkola.kidztv.ui.settings.appmanager.AppManagerViewModel
 import com.eltonkola.kidztv.ui.settings.pin.PinViewModel
 import org.koin.android.ext.android.startKoin
 import org.koin.androidx.viewmodel.ext.koin.viewModel
@@ -38,7 +39,7 @@ class MainApp : Application() {
 
     val appModule = module {
 
-        single { AppManager(get()) }
+        single { AppManager(get(), get()) }
 
         single { SharedPreferencesManager(get()) }
 
@@ -52,6 +53,9 @@ class MainApp : Application() {
 
         // MyViewModel ViewModel
         viewModel { PinViewModel(get()) }
+
+        viewModel { AppManagerViewModel(get()) }
+
 
     }
 

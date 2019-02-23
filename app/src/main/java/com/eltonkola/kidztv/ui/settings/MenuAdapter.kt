@@ -7,12 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.eltonkola.kidztv.R
+import com.eltonkola.kidztv.model.settings.BaseMenuItem
+import com.eltonkola.kidztv.model.settings.SettingsMenuItem
 import kotlinx.android.synthetic.main.item_settings_list.view.*
 
 
 class MenuAdapter(
-    private val parentActivity: SettingsActivity,
-    private val values: List<SettingsActivity.MenuItem>,
+    private val values: List<BaseMenuItem>,
     private val onClickListener: View.OnClickListener
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -30,7 +31,7 @@ class MenuAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (values[position] is SettingsActivity.SettingsItem) {
+        return if (values[position] is SettingsMenuItem) {
             0
         } else {
             1
@@ -45,7 +46,7 @@ class MenuAdapter(
         } else if (holder is ViewHolder) {
 
             holder.icon.setImageDrawable(
-                (item as SettingsActivity.SettingsItem).icon
+                (item as SettingsMenuItem).icon
             )
             holder.title.text = item.title
 

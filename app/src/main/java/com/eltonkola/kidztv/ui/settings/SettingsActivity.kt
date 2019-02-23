@@ -1,15 +1,14 @@
 package com.eltonkola.kidztv.ui.settings
 
-import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.eltonkola.kidztv.BuildConfig
 import com.eltonkola.kidztv.R
 import com.eltonkola.kidztv.data.AppManager
+import com.eltonkola.kidztv.model.settings.BaseMenuItem
+import com.eltonkola.kidztv.model.settings.SettingsMenuItem
 import com.eltonkola.kidztv.ui.settings.appmanager.AppManagerFragment
 import com.eltonkola.kidztv.ui.settings.pin.PinFragment
 import com.eltonkola.kidztv.ui.settings.stats.StatsFragment
@@ -20,49 +19,45 @@ import org.koin.android.ext.android.inject
 
 class SettingsActivity : AppCompatActivity() {
 
-    class SettingsItem(title: String, val external: Boolean, val icon: Drawable?, val fragment: Fragment? = null, val intent: Intent? = null) :
-        MenuItem(title)
 
-    open class MenuItem(val title: String) {
-        override fun toString(): String = title
-    }
 
-    private val settingsItems = mutableListOf<MenuItem>()
+
+    private val settingsItems = mutableListOf<BaseMenuItem>()
 
     val appManager: AppManager by inject()
 
     fun initMenu() {
 
-        settingsItems.add(MenuItem("App Settings"))
+        settingsItems.add(BaseMenuItem("App Settings"))
         settingsItems.add(
-            SettingsItem(
+            SettingsMenuItem(
                 "Video Manager", false,
                 ContextCompat.getDrawable(this, R.drawable.ic_subscriptions_black_24dp),
                 VideoManagerFragment()
             )
         )
         settingsItems.add(
-            SettingsItem(
-                "App Manager",false,
+            SettingsMenuItem(
+                "App Manager", false,
                 ContextCompat.getDrawable(this, R.drawable.ic_view_comfy_black_24dp),
                 AppManagerFragment()
             )
         )
         settingsItems.add(
-            SettingsItem(
-                "Stats",false,
+            SettingsMenuItem(
+                "Stats", false,
                 ContextCompat.getDrawable(this, R.drawable.ic_graphic_eq_black_24dp),
                 StatsFragment()
             )
         )
         settingsItems.add(
-            SettingsItem(
-                "Pin code",false,
+            SettingsMenuItem(
+                "Pin code", false,
                 ContextCompat.getDrawable(this, R.drawable.ic_security_black_24dp),
                 PinFragment()
             )
         )
-        settingsItems.add(MenuItem("Plugins/Download videos"))
+        settingsItems.add(BaseMenuItem("Plugins/Download videos"))
 
 
 //        appManager.getPlugins().forEach {
@@ -72,17 +67,17 @@ class SettingsActivity : AppCompatActivity() {
         settingsItems.addAll(appManager.getPlugins().map { appManager.toSettingItem(it) })
 
         settingsItems.add(
-            SettingsItem(
-                "Get plugins",false,
+            SettingsMenuItem(
+                "Get plugins", false,
                 ContextCompat.getDrawable(this, R.drawable.ic_get_app_black_24dp),
                 WebFragment.getFragment("Plugins", "file:///android_asset/plugins.html")
             )
         )
 
-        settingsItems.add(MenuItem("Other"))
+        settingsItems.add(BaseMenuItem("Other"))
         settingsItems.add(
-            SettingsItem(
-                "About (v. ${BuildConfig.VERSION_NAME})",false,
+            SettingsMenuItem(
+                "About (v. ${BuildConfig.VERSION_NAME})", false,
                 ContextCompat.getDrawable(this, R.drawable.ic_info_outline_black_24dp),
                 WebFragment.getFragment("About", "file:///android_asset/about.html")
             )
@@ -96,14 +91,14 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
         initMenu()
-        item_list.adapter = MenuAdapter(this, settingsItems,
+        item_list.adapter = MenuAdapter(settingsItems,
             View.OnClickListener { v ->
-                openFragment(v.tag as SettingsItem)
+                openFragment(v.tag as SettingsMenuItem)
             })
-        openFragment(settingsItems[1] as SettingsItem)
+        openFragment(settingsItems[1] as SettingsMenuItem)
     }
 
-    private fun openFragment(item: SettingsItem) {
+    private fun openFragment(item: SettingsMenuItem) {
         item.fragment?.let {
             supportFragmentManager
                 .beginTransaction()

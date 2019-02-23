@@ -11,25 +11,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.eltonkola.kidztv.R
 import com.eltonkola.kidztv.ui.ViewManagerViewModel
 import kotlinx.android.synthetic.main.fragment_settings_video_manager.*
-import kotlinx.android.synthetic.main.fragment_settings_video_manager.view.*
 
 class VideoManagerFragment : Fragment() {
 
     lateinit var vm: ViewManagerViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_settings_video_manager, container, false)
-
-        rootView.item_detail.text = "Video Manager"
-
-        return rootView
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return  inflater.inflate(R.layout.fragment_settings_video_manager, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setting_titles.text = "Video Manager"
 
         vm = ViewModelProviders.of(this).get(ViewManagerViewModel::class.java)
 
@@ -56,8 +50,6 @@ class VideoManagerFragment : Fragment() {
             }
             (video_list.adapter as EditVideoListAdapter).setVideoElements(videos)
         })
-
-
 
     }
 

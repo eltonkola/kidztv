@@ -9,13 +9,19 @@
                   android:layout_height="match_parent"
                   android:orientation="vertical">
 
-        <TextView android:id="@+id/item_detail"
+        <TextView android:id="@+id/setting_title"
                   style="?android:attr/textAppearanceLarge"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:padding="16dp"
                   android:textIsSelectable="true"/>
 
+        <TextView
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Below is the list of apps and games you kid can open from the main ui."
+        />
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/video_list"
@@ -24,6 +30,12 @@
                 android:layout_weight="1"
                 android:clipChildren="false"
                 android:clipToPadding="false"/>
+
+        <Button android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/but_add_app"
+                android:text="Add app/game to whitelist"
+                />
 
     </LinearLayout>
     <ProgressBar android:layout_width="wrap_content"
