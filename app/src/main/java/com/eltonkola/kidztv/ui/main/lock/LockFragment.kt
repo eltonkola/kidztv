@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.eltonkola.kidztv.R
+import com.eltonkola.kidztv.ui.main.MainActivity
 import com.eltonkola.kidztv.ui.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_main_lock.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,8 +24,6 @@ class LockFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        title.text = "Unlock"
-
         otp_view.setOtpCompletionListener { otp ->
 
             if (otp != null && vm.isPinCorrect(otp)) {
@@ -34,6 +33,11 @@ class LockFragment : Fragment() {
             } else {
                 Toast.makeText(activity, "Error $otp, is the wrong code", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        root_lock.setTitle("Enter your pin code")
+        root_lock.onDone = {
+            (activity as MainActivity).resetExtraUi()
         }
 
 

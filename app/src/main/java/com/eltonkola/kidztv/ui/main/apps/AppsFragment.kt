@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.eltonkola.kidztv.R
+import com.eltonkola.kidztv.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_main_apps.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -21,9 +22,6 @@ class AppsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        title.text = "Apps"
-
 
         vm.loading_apps.observe(this, Observer { loadingApps ->
             if (loadingApps) {
@@ -49,6 +47,10 @@ class AppsFragment : Fragment() {
             }
         })
 
+        root_apps.setTitle("Apps")
+        root_apps.onDone = {
+            (activity as MainActivity).resetExtraUi()
+        }
 
     }
 }

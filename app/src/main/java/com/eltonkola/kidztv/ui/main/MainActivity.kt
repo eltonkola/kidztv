@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eltonkola.kidztv.R
+import com.eltonkola.kidztv.ui.main.apps.AppsFragment
+import com.eltonkola.kidztv.ui.main.lock.LockFragment
+import com.eltonkola.kidztv.ui.main.timer.TimerFragment
 import com.eltonkola.kidztv.utils.SpacesItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_topbar.*
@@ -57,8 +60,7 @@ class MainActivity : AppCompatActivity() {
 
         video_grid.adapter = VideoListAdapter(this) { video ->
             video_player.setVideoURI(Uri.fromFile(video.file))
-//            root_apps.visibility = View.GONE
-//            root_lock.visibility = View.GONE
+            vm.onPlayVideo(video)
         }
 
         vm.videos.observe(this, Observer { videos ->
@@ -66,59 +68,36 @@ class MainActivity : AppCompatActivity() {
         })
 
 
-        //AppsFragment
-        //LockFragment
-        //TimerFragment
+        vm.loading.observe(this, Observer { loading ->
+            if (loading) {
+                loading_videos.visibility = View.VISIBLE
+            } else {
+                loading_videos.visibility = View.GONE
+            }
+        })
+
+
+
+
+        vm.extraUi.observe(this, Observer { ui ->
+            showExtraUi(ui)
+        })
 
         video_player.setOnPreparedListener {
             video_player.start()
         }
 
-
-
         but_timer.setOnClickListener {
-            //            if (!vm.isPinSet()) {
-//                if (root_timer.visibility == View.VISIBLE) {
-//                    root_timer.visibility = View.GONE
-//                } else {
-//                    root_timer.visibility = View.VISIBLE
-//                }
-//            } else {
-//                if (root_timer.visibility == View.VISIBLE) {
-//                    root_timer.visibility = View.GONE
-//                    root_timer_lock.visibility = View.GONE
-//                } else {
-//                    if (root_timer_lock.visibility == View.VISIBLE) {
-//                        root_timer_lock.visibility = View.GONE
-//                        root_timer.visibility = View.GONE
-//                    } else {
-//                        root_timer_lock.visibility = View.VISIBLE
-//                    }
-//                }
-//            }
+            vm.showTimer()
         }
 
 
         but_settings.setOnClickListener {
-
-//            if (vm.isPinSet()) {
-//                if (root_lock.visibility == View.VISIBLE) {
-//                    root_lock.visibility = View.GONE
-//                } else {
-//                    root_lock.visibility = View.VISIBLE
-//                }
-//            } else {
-//                startActivity(Intent(this, SettingsActivity::class.java))
-//
-//            }
+            vm.showSettings(this)
         }
 
         but_apps.setOnClickListener {
-//            if (root_apps.visibility == View.VISIBLE) {
-//                root_apps.visibility = View.GONE
-//            } else {
-//                root_apps.visibility = View.VISIBLE
-//            }
+            vm.showApps()
         }
 
         vm.permissionState.observe(this, Observer {
@@ -141,29 +120,47 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun showExtraUi(ui: MainViewModel.ExtraUi) {
+        when (ui) {
+            MainViewModel.ExtraUi.NONE -> {
+                for (fragment in supportFragmentManager.fragments) {
+                    supportFragmentManager.beginTransaction().remove(fragment).commit()
+                }
+                extra_ui_container.visibility = View.GONE
+            }
+            MainViewModel.ExtraUi.APPS -> {
+                extra_ui_container.visibility = View.VISIBLE
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.extra_ui_container, AppsFragment())
+                    .commit()
+            }
+            MainViewModel.ExtraUi.UNLOCK -> {
+                extra_ui_container.visibility = View.VISIBLE
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.extra_ui_container, LockFragment())
+                    .commit()
+            }
+            MainViewModel.ExtraUi.TIMER -> {
+                extra_ui_container.visibility = View.VISIBLE
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.extra_ui_container, TimerFragment())
+                    .commit()
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         vm.reloadVideos()
-    }
-
-    //    fun onCreateInputConnection(outAttrs: EditorInfo): InputConnection {
-//        outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI
-//
-//        // etc.
-//    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-//        hide()
-
-//        hideSystemUI()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) hideSystemUI()
     }
-
 
     private fun hideSystemUI() {
         // Enables regular immersive mode.
@@ -198,7 +195,7 @@ class MainActivity : AppCompatActivity() {
         animateHideView(padding_right, -1)
 
 
-//        top_bar.visibility = View.GONE
+        extra_ui_container.visibility = View.GONE
 
         mVisible = false
     }
@@ -239,11 +236,16 @@ class MainActivity : AppCompatActivity() {
         animateHideShow(padding_left)
         animateHideShow(padding_right)
 
+        extra_ui_container.visibility = View.VISIBLE
 //        top_bar.visibility = View.VISIBLE
 
 //        root_view.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
         mVisible = true
+    }
+
+    fun resetExtraUi() {
+        vm.resetExtraUi()
     }
 
 }

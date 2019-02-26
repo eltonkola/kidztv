@@ -1,0 +1,48 @@
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:background="@drawable/window_background"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            android:padding="6dp"
+            android:id="@+id/top_container"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:text="WindowView"
+                  android:textStyle="bold"
+                  android:textSize="16sp"
+                  android:textColor="@color/colorPrimaryDark"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/window_title"
+        />
+        <com.eltonkola.kidztv.views.CountDownView
+                android:id="@+id/countdow_view"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:background="@drawable/countdown_bg"
+
+        />
+
+        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:id="@+id/close"
+                   android:tint="@color/colorPrimaryDark"
+                   android:src="@drawable/ic_close_24dp"/>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+            android:layout_below="@+id/top_container"
+            android:layout_width="match_parent"
+            android:id="@+id/content_container"
+            android:layout_height="match_parent"/>
+
+
+</RelativeLayout>
