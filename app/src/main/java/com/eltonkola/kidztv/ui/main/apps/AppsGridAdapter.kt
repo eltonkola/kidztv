@@ -1,4 +1,4 @@
-package com.eltonkola.kidztv.ui
+package com.eltonkola.kidztv.ui.main.apps
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eltonkola.kidztv.R
 import com.eltonkola.kidztv.model.AppElement
 
-class AppGridAdapter constructor(context: Context, val onAction: (AppElement) -> Unit) :
+class AppsGridAdapter constructor(context: Context, val onAction: (AppElement) -> Unit) :
 
-    RecyclerView.Adapter<AppGridAdapter.WordViewHolder>() {
+    RecyclerView.Adapter<AppsGridAdapter.WordViewHolder>() {
 
     private val inflater = LayoutInflater.from(context)
     private var data: List<AppElement> = emptyList()

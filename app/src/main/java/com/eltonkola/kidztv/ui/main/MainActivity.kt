@@ -1,8 +1,7 @@
-package com.eltonkola.kidztv.ui
+package com.eltonkola.kidztv.ui.main
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -11,18 +10,11 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eltonkola.kidztv.R
-import com.eltonkola.kidztv.ui.settings.SettingsActivity
 import com.eltonkola.kidztv.utils.SpacesItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main_apps.*
-import kotlinx.android.synthetic.main.activity_main_lock.*
-import kotlinx.android.synthetic.main.activity_main_sidebar.*
-import kotlinx.android.synthetic.main.activity_main_timer_lock.*
-import kotlinx.android.synthetic.main.activity_main_timer_settings.*
-import kotlinx.android.synthetic.main.fragment_settings_pin.view.*
+import kotlinx.android.synthetic.main.activity_main_topbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -65,109 +57,68 @@ class MainActivity : AppCompatActivity() {
 
         video_grid.adapter = VideoListAdapter(this) { video ->
             video_player.setVideoURI(Uri.fromFile(video.file))
-            root_apps.visibility = View.GONE
-            root_lock.visibility = View.GONE
+//            root_apps.visibility = View.GONE
+//            root_lock.visibility = View.GONE
         }
 
         vm.videos.observe(this, Observer { videos ->
             (video_grid.adapter as VideoListAdapter).setVideoElements(videos)
         })
 
-        vm.loading_apps.observe(this, Observer { loadingApps ->
-            if(loadingApps){
-                loading_apps.visibility = View.VISIBLE
-            }else{
-                loading_apps.visibility = View.GONE
-            }
-        })
 
-
-        app_grid.layoutManager = GridLayoutManager(this, 6)
-        app_grid.setHasFixedSize(true)
-
-        app_grid.adapter = AppGridAdapter(this) { app ->
-            startActivity(vm.openApp(app))
-        }
-
-        vm.apps.observe(this, Observer { apps ->
-            if(apps.isEmpty()){
-                no_apps.visibility = View.VISIBLE
-            }else {
-                no_apps.visibility = View.GONE
-                (app_grid.adapter as AppGridAdapter).setData(apps)
-            }
-        })
+        //AppsFragment
+        //LockFragment
+        //TimerFragment
 
         video_player.setOnPreparedListener {
             video_player.start()
         }
 
-        otp_view.setOtpCompletionListener { otp ->
-
-            if(otp != null && vm.isPinCorrect(otp)) {
-                root_lock.visibility =  View.GONE
-                otp_view.setText("")
-                startActivity(Intent(this, SettingsActivity::class.java))
-            }else {
-                Toast.makeText(this@MainActivity, "Error $otp, is the wrong code", Toast.LENGTH_SHORT).show()
-            }
-        }
 
 
         but_timer.setOnClickListener {
-            if (!vm.isPinSet()) {
-                if (root_timer.visibility == View.VISIBLE) {
-                    root_timer.visibility = View.GONE
-                }else{
-                    root_timer.visibility = View.VISIBLE
-                }
-            } else {
-                if (root_timer.visibility == View.VISIBLE) {
-                    root_timer.visibility = View.GONE
-                    root_timer_lock.visibility = View.GONE
-                } else {
-                    if (root_timer_lock.visibility == View.VISIBLE) {
-                        root_timer_lock.visibility = View.GONE
-                        root_timer.visibility = View.GONE
-                    } else {
-                        root_timer_lock.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }
-
-        otp_view_timer.setOtpCompletionListener { otp ->
-
-            if(otp != null && vm.isPinCorrect(otp)) {
-                root_timer_lock.visibility =  View.GONE
-                otp_view.setText("")
-                root_timer.visibility =  View.VISIBLE
-            }else {
-                Toast.makeText(this@MainActivity, "Error $otp, is the wrong code", Toast.LENGTH_SHORT).show()
-            }
+            //            if (!vm.isPinSet()) {
+//                if (root_timer.visibility == View.VISIBLE) {
+//                    root_timer.visibility = View.GONE
+//                } else {
+//                    root_timer.visibility = View.VISIBLE
+//                }
+//            } else {
+//                if (root_timer.visibility == View.VISIBLE) {
+//                    root_timer.visibility = View.GONE
+//                    root_timer_lock.visibility = View.GONE
+//                } else {
+//                    if (root_timer_lock.visibility == View.VISIBLE) {
+//                        root_timer_lock.visibility = View.GONE
+//                        root_timer.visibility = View.GONE
+//                    } else {
+//                        root_timer_lock.visibility = View.VISIBLE
+//                    }
+//                }
+//            }
         }
 
 
         but_settings.setOnClickListener {
 
-                if(vm.isPinSet()){
-                    if(root_lock.visibility == View.VISIBLE){
-                        root_lock.visibility =  View.GONE
-                    }else{
-                        root_lock.visibility =  View.VISIBLE
-                    }
-                }else{
-                    startActivity(Intent(this, SettingsActivity::class.java))
-
-                }
+//            if (vm.isPinSet()) {
+//                if (root_lock.visibility == View.VISIBLE) {
+//                    root_lock.visibility = View.GONE
+//                } else {
+//                    root_lock.visibility = View.VISIBLE
+//                }
+//            } else {
+//                startActivity(Intent(this, SettingsActivity::class.java))
+//
+//            }
         }
 
         but_apps.setOnClickListener {
-            if(root_apps.visibility == View.VISIBLE){
-                root_apps.visibility =  View.GONE
-            }else{
-                root_apps.visibility =  View.VISIBLE
-            }
+//            if (root_apps.visibility == View.VISIBLE) {
+//                root_apps.visibility = View.GONE
+//            } else {
+//                root_apps.visibility = View.VISIBLE
+//            }
         }
 
         vm.permissionState.observe(this, Observer {
@@ -186,7 +137,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         vm.checkPermissions(this)
-
 
 
     }
@@ -242,6 +192,12 @@ class MainActivity : AppCompatActivity() {
     private fun hide() {
         animateHideView(video_grid, 1)
         animateHideView(top_bar, -1)
+
+
+        animateHideView(padding_left, 1)
+        animateHideView(padding_right, -1)
+
+
 //        top_bar.visibility = View.GONE
 
         mVisible = false
@@ -279,6 +235,9 @@ class MainActivity : AppCompatActivity() {
     private fun show() {
         animateHideShow(video_grid)
         animateHideShow(top_bar)
+
+        animateHideShow(padding_left)
+        animateHideShow(padding_right)
 
 //        top_bar.visibility = View.VISIBLE
 

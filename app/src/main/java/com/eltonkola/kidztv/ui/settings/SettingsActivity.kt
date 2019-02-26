@@ -20,9 +20,6 @@ import org.koin.android.ext.android.inject
 
 class SettingsActivity : AppCompatActivity() {
 
-
-
-
     private val settingsItems = mutableListOf<BaseMenuItem>()
 
     val appManager: AppManager by inject()
@@ -59,11 +56,6 @@ class SettingsActivity : AppCompatActivity() {
             )
         )
         settingsItems.add(BaseMenuItem("Plugins/Download videos"))
-
-
-//        appManager.getPlugins().forEach {
-//            settingsItems.add(appManager.toSettingItem(it))
-//        }
 
         settingsItems.addAll(appManager.getPlugins().map { appManager.toSettingItem(it) })
 

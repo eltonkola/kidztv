@@ -8,10 +8,10 @@
                 android:id="@+id/root_timer_lock"
                 android:gravity="center"
                 android:visibility="gone"
-                tools:context=".ui.MainActivity">
+                tools:context=".ui.main.MainActivity">
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:id="@+id/lock_timercreen_title"
+              android:id="@+id/title"
               android:textSize="20sp"
               android:layout_centerInParent="true"
               android:text="Enter your pin code to change timer settings"
@@ -23,7 +23,7 @@
               android:paddingTop="16sp"
               android:paddingBottom="16sp"
               android:textSize="16sp"
-              android:layout_below="@+id/lock_timercreen_title"
+              android:layout_below="@+id/title"
               android:layout_centerInParent="true"
               android:text="Auto dismiss in 10 seconds.."
     />
@@ -31,7 +31,7 @@
     <com.mukesh.OtpView
 
             android:layout_below="@+id/lockscreen_timeout"
-            android:id="@+id/otp_view_timer"
+            android:id="@+id/otp_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -43,5 +43,14 @@
             app:viewType="line"
             style="@style/OtpWidget.OtpView"
     />
+
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="TODO"
+              android:id="@+id/root_timer"
+              android:visibility="gone"
+    />
+
 
 </RelativeLayout>

@@ -3,20 +3,31 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@drawable/main_bg"
-              android:orientation="vertical"
+              android:background="@color/black"
+              android:orientation="horizontal"
               android:id="@+id/root_view"
-              tools:context=".ui.MainActivity">
+              tools:context=".ui.main.MainActivity">
 
-    <LinearLayout android:orientation="horizontal"
-                  android:layout_width="match_parent"
-                  android:layout_height="0dp"
-                  android:layout_weight="1">
+    <View android:id="@+id/padding_left"
+          android:clickable="false"
+          android:focusable="false"
+          android:layout_width="90dp"
+          android:background="@color/grey"
+          android:alpha="0.9"
+          android:visibility="gone"
+          android:layout_height="match_parent"/>
 
-        <RelativeLayout android:id="@+id/container"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
+    <LinearLayout android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:orientation="vertical"
+                  android:layout_height="match_parent">
+
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="@color/black"
+                        android:orientation="vertical">
+
 
             <com.devbrackets.android.exomedia.ui.widget.VideoView
                     android:id="@+id/video_player"
@@ -24,33 +35,47 @@
                     android:layout_height="match_parent"
                     android:gravity="center"/>
 
+            <include layout="@layout/activity_main_topbar"
+                     android:layout_centerHorizontal="true"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+            />
 
-            <include layout="@layout/activity_main_apps" />
+            <FrameLayout
+                    android:layout_below="@id/top_bar"
+                    android:id="@+id/extra_ui_container"
+                    android:layout_width="match_parent"
+                    android:background="@color/colorAccent"
+                    android:alpha="0.6"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_height="match_parent">
 
-            <include layout="@layout/activity_main_lock" />
-            <include layout="@layout/activity_main_timer_settings" />
-            <include layout="@layout/activity_main_timer_lock" />
+            </FrameLayout>
 
 
         </RelativeLayout>
 
 
-        <include layout="@layout/activity_main_sidebar" />
+        <!--app:useDefaultControls="true"-->
 
+
+        <androidx.recyclerview.widget.RecyclerView
+
+                android:id="@+id/video_grid"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"/>
 
     </LinearLayout>
-
-
-    <!--app:useDefaultControls="true"-->
-
-
-    <androidx.recyclerview.widget.RecyclerView
-
-            android:id="@+id/video_grid"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:clipChildren="false"
-            android:clipToPadding="false"/>
-
+    <View android:id="@+id/padding_right"
+          android:clickable="false"
+          android:focusable="false"
+          android:layout_width="90dp"
+          android:background="@color/grey"
+          android:alpha="0.9"
+          android:visibility="gone"
+          android:layout_height="match_parent"/>
 
 </LinearLayout>

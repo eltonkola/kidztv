@@ -8,7 +8,10 @@ import com.eltonkola.kidztv.data.AppManager
 import com.eltonkola.kidztv.data.SharedPreferencesManager
 import com.eltonkola.kidztv.data.VideoManager
 import com.eltonkola.kidztv.data.db.AppDatabase
-import com.eltonkola.kidztv.ui.MainViewModel
+import com.eltonkola.kidztv.ui.main.MainViewModel
+import com.eltonkola.kidztv.ui.main.apps.AppsViewModel
+import com.eltonkola.kidztv.ui.main.lock.LockViewModel
+import com.eltonkola.kidztv.ui.main.timer.TimerViewModel
 import com.eltonkola.kidztv.ui.settings.appmanager.AppManagerViewModel
 import com.eltonkola.kidztv.ui.settings.appmanager.add.AddAppsViewModel
 import com.eltonkola.kidztv.ui.settings.pin.PinViewModel
@@ -62,7 +65,13 @@ class MainApp : Application() {
 
         viewModel { AddAppsViewModel(get()) }
 
-        viewModel { MainViewModel(get(), get() , get()) }
+        viewModel { AppsViewModel(get()) }
+
+        viewModel { TimerViewModel(get()) }
+
+        viewModel { LockViewModel(get()) }
+
+        viewModel { MainViewModel(get(), get(), get()) }
 
         viewModel { ViewManagerViewModel(applicationContext, get()) }
 

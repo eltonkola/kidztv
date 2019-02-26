@@ -8,23 +8,23 @@
                 android:id="@+id/root_lock"
                 android:gravity="center"
                 android:visibility="gone"
-                tools:context=".ui.MainActivity">
-<TextView android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:id="@+id/lockscreen_title"
-            android:textSize="20sp"
-          android:layout_centerInParent="true"
-          android:text="Enter your pin code"
-/>
+                tools:context=".ui.main.MainActivity">
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/title"
+              android:textSize="20sp"
+              android:layout_centerInParent="true"
+              android:text="Enter your pin code"
+    />
 
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:id="@+id/lockscreen_timeout"
-            android:paddingTop="16sp"
+              android:paddingTop="16sp"
               android:paddingBottom="16sp"
 
-                android:textSize="16sp"
-              android:layout_below="@+id/lockscreen_title"
+              android:textSize="16sp"
+              android:layout_below="@+id/title"
               android:layout_centerInParent="true"
               android:text="Auto dismiss in 10 seconds.."
     />
@@ -35,7 +35,7 @@
             android:id="@+id/otp_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
+            android:layout_centerInParent="true"
             android:inputType="number"
             android:itemBackground="@color/colorPrimary"
             android:textColor="@android:color/white"

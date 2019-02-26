@@ -1,4 +1,4 @@
-package com.eltonkola.kidztv.ui
+package com.eltonkola.kidztv.ui.main
 
 import android.content.Context
 import android.graphics.Point

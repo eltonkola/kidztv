@@ -7,7 +7,11 @@
                 android:id="@+id/root_apps"
                 android:gravity="center"
                 android:visibility="gone"
-                tools:context=".ui.MainActivity">
+                tools:context=".ui.main.MainActivity">
+
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:id="@+id/title"
+    />
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/app_grid"
