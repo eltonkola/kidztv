@@ -82,18 +82,21 @@ class MainViewModel(
     fun checkPermissions(mainActivity: MainActivity) {
         permissionState.postValue(PermissionState.CHECKING)
         val rxPermissions = RxPermissions(mainActivity)
-        compositeDisposable.add(rxPermissions
-            .request(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            .subscribe { granted ->
-                if (granted) { // Always true pre-M
-                    permissionState.postValue(PermissionState.PERMISSION_OK)
-                } else {
-                    permissionState.postValue(PermissionState.PERMISSION_KO)
+        compositeDisposable.add(
+
+            rxPermissions
+                .request(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                .subscribe { granted ->
+                    if (granted) { // Always true pre-M
+                        permissionState.postValue(PermissionState.PERMISSION_OK)
+                    } else {
+                        permissionState.postValue(PermissionState.PERMISSION_KO)
+                    }
                 }
-            })
+        )
 
     }
 
