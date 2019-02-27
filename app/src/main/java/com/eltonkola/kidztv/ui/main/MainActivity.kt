@@ -1,7 +1,5 @@
 package com.eltonkola.kidztv.ui.main
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -15,7 +13,6 @@ import com.eltonkola.kidztv.R
 import com.eltonkola.kidztv.ui.main.apps.AppsFragment
 import com.eltonkola.kidztv.ui.main.lock.LockFragment
 import com.eltonkola.kidztv.ui.main.timer.TimerFragment
-import com.eltonkola.kidztv.utils.SpacesItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_topbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -40,23 +37,19 @@ class MainActivity : AppCompatActivity() {
 
         video_player.setOnClickListener { toggle() }
 
-        vm.loading.observe(this, Observer { loading ->
-            Toast.makeText(this, "Loading: $loading", Toast.LENGTH_SHORT).show()
-        })
-
         video_grid.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         video_grid.setHasFixedSize(true)
 
-        video_grid.addItemDecoration(
-            SpacesItemDecoration(
-                resources,
-                R.dimen.horizontal_list_item_spacing,
-                R.dimen.horizontal_list_item_top_margin,
-                R.dimen.horizontal_list_item_bottom_margin,
-                R.dimen.margin_start_end,
-                R.dimen.margin_start_end
-            )
-        )
+//        video_grid.addItemDecoration(
+//            SpacesItemDecoration(
+//                resources,
+//                R.dimen.horizontal_list_item_spacing,
+//                R.dimen.horizontal_list_item_top_margin,
+//                R.dimen.horizontal_list_item_bottom_margin,
+//                R.dimen.margin_start_end,
+//                R.dimen.margin_start_end
+//            )
+//        )
 
         video_grid.adapter = VideoListAdapter(this) { video ->
             video_player.setVideoURI(Uri.fromFile(video.file))
@@ -201,31 +194,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun animateHideView(view: View, per: Int) {
-        view.animate()
-            .translationY(per * view.height.toFloat())
-            .alpha(0.0f)
-            .setDuration(100)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    super.onAnimationEnd(animation)
-                    view.visibility = View.GONE
-                }
-            })
+//        view.animate()
+//            .translationY(per * view.height.toFloat())
+//            .alpha(0.0f)
+//            .setDuration(100)
+//            .setListener(object : AnimatorListenerAdapter() {
+//                override fun onAnimationEnd(animation: Animator) {
+//                    super.onAnimationEnd(animation)
+//                    view.visibility = View.GONE
+//                }
+//            })
+        view.visibility = View.GONE
     }
 
 
     private fun animateHideShow(view: View) {
         view.visibility = View.VISIBLE
-        view.animate()
-            .translationY(0.toFloat())
-            .alpha(1.0f)
-            .setDuration(100)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    super.onAnimationEnd(animation)
-
-                }
-            })
+//        view.visibility = View.VISIBLE
+//        view.animate()
+//            .translationY(0.toFloat())
+//            .alpha(1.0f)
+//            .setDuration(100)
+//            .setListener(object : AnimatorListenerAdapter() {
+//                override fun onAnimationEnd(animation: Animator) {
+//                    super.onAnimationEnd(animation)
+//
+//                }
+//            })
     }
 
 
