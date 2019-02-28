@@ -3,10 +3,10 @@ package com.eltonkola.kidztv.views
 import android.content.Context
 import android.os.CountDownTimer
 import android.util.AttributeSet
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 
 
-class CountDownView : TextView {
+class CountDownView : AppCompatTextView {
 
     constructor(context: Context) : super(context) {
         init(null, 0)
