@@ -5,33 +5,24 @@
     <Transition
             motion:constraintSetStart="@+id/start"
             motion:constraintSetEnd="@+id/end"
-            motion:duration="1000">
+            motion:duration="300">
         <!--<OnSwipe-->
         <!--motion:touchAnchorId="@+id/button"-->
         <!--motion:touchAnchorSide="right"-->
         <!--motion:dragDirection="dragRight"/>-->
 
-        <OnClick
-                motion:target="@+id/video_view"
-                motion:clickAction="toggle"/>
+        <!--<OnClick-->
+        <!--motion:target="@+id/video_view"-->
+        <!--motion:clickAction="toggle"/>-->
 
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
-        <Constraint
-                android:id="@+id/button"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="8dp"
-                motion:layout_constraintBottom_toBottomOf="parent"
-                motion:layout_constraintStart_toStartOf="parent"
-                motion:layout_constraintTop_toTopOf="parent"/>
 
         <Constraint
                 android:id="@+id/top_bar"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                motion:visibility="visible"
+                android:layout_height="wrap_content"
                 android:alpha="1"
                 motion:layout_constraintRight_toLeftOf="parent"
                 motion:layout_constraintLeft_toRightOf="parent"
@@ -41,7 +32,6 @@
                 android:id="@+id/bottom_bar"
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
-                motion:visibility="visible"
                 motion:layout_constraintRight_toLeftOf="parent"
                 motion:layout_constraintLeft_toRightOf="parent"
                 motion:layout_constraintBottom_toBottomOf="parent"
@@ -75,57 +65,39 @@
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
-        <Constraint
-                android:id="@+id/button"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginEnd="8dp"
-                motion:layout_constraintBottom_toBottomOf="parent"
-                motion:layout_constraintEnd_toEndOf="parent"
-                motion:layout_constraintTop_toTopOf="parent"/>
 
 
         <Constraint
                 android:id="@+id/top_bar"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                motion:visibility="gone"
+                android:layout_height="wrap_content"
                 android:alpha="0"
                 motion:layout_constraintRight_toLeftOf="parent"
                 motion:layout_constraintLeft_toRightOf="parent"
-                motion:layout_constraintTop_toTopOf="parent"
+                motion:layout_constraintBottom_toTopOf="parent"
         />
 
         <Constraint
                 android:id="@+id/bottom_bar"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                motion:visibility="gone"
+                android:layout_height="110dp"
                 motion:layout_constraintRight_toLeftOf="parent"
                 motion:layout_constraintLeft_toRightOf="parent"
-                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintTop_toBottomOf="parent"
 
         />
 
         <Constraint
                 android:id="@+id/padding_left"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                motion:visibility="gone"
-                motion:layout_constraintLeft_toLeftOf="parent"
                 motion:layout_constraintBottom_toTopOf="@id/bottom_bar"
-                motion:layout_constraintRight_toLeftOf="@+id/video_view"
+                motion:layout_constraintRight_toLeftOf="parent"
                 motion:layout_constraintTop_toTopOf="parent"
 
         />
 
         <Constraint
                 android:id="@+id/padding_right"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                motion:visibility="gone"
-                motion:layout_constraintLeft_toRightOf="@+id/video_view"
-                motion:layout_constraintRight_toRightOf="parent"
+                motion:layout_constraintLeft_toRightOf="parent"
                 motion:layout_constraintBottom_toTopOf="@id/bottom_bar"
                 motion:layout_constraintTop_toTopOf="parent"
         />
