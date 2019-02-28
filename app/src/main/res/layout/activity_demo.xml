@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:windowActionBar="false"
+        android:background="#FF9500"
+        tools:context=".ui.main.MainActivity"
+        tools:showPaths="true"
+        app:layoutDescription="@xml/scene_01"
+
+>
+
+    <View android:layout_width="match_parent"
+          android:layout_height="110dp"
+          android:background="#A2FFE400"
+          android:id="@+id/bottom_bar"
+          app:layout_constraintRight_toLeftOf="parent"
+          app:layout_constraintLeft_toRightOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+    />
+
+
+    <View
+            android:id="@+id/padding_left"
+            android:layout_width="90dp"
+            android:layout_height="0dp"
+            android:background="#005875"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+            app:layout_constraintRight_toLeftOf="@+id/video_view"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <View
+            android:id="@+id/padding_right"
+            android:layout_width="90dp"
+            android:layout_height="0dp"
+            android:background="#005875"
+            app:layout_constraintLeft_toRightOf="@+id/video_view"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+            app:layout_constraintTop_toTopOf="parent"
+    />
+
+    <View
+
+
+            android:id="@+id/video_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#3E00A1"
+            app:layout_constraintRight_toLeftOf="@id/padding_right"
+            app:layout_constraintLeft_toRightOf="@+id/padding_left"
+            app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+            app:layout_constraintTop_toTopOf="parent"
+    />
+
+
+    <View android:layout_width="match_parent"
+          android:layout_height="40dp"
+          android:background="#60FFEB3B"
+          android:id="@+id/top_bar"
+          app:layout_constraintRight_toLeftOf="parent"
+          app:layout_constraintLeft_toRightOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+    />
+
+
+    <View
+            android:id="@+id/button"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/colorAccent"
+            android:text="Button"/>
+
+
+    <!--<com.devbrackets.android.exomedia.ui.widget.VideoView-->
+    <!--android:background="#ff00ff"-->
+    <!--android:id="@+id/video_player"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:layout_constraintLeft_toRightOf="@id/padding_left"-->
+    <!--app:layout_constraintRight_toLeftOf="@id/padding_right"-->
+    <!--android:gravity="center"-->
+
+
+    <!--/>-->
+    <!--<View android:id="@+id/padding_left"-->
+    <!--android:layout_width="90dp"-->
+    <!--android:background="@drawable/gradient_left"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--/>-->
+    <!--<FrameLayout-->
+    <!--android:id="@+id/extra_ui_container"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_marginLeft="16dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_marginTop="50dp"-->
+    <!--android:layout_marginBottom="16dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--/>-->
+
+
+    <!--<View android:id="@+id/padding_right"-->
+    <!--android:layout_width="90dp"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--android:background="@drawable/gradient_right"-->
+    <!--android:layout_height="match_parent"/>-->
+
+
+    <!--<androidx.recyclerview.widget.RecyclerView-->
+
+    <!--android:id="@+id/video_grid"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="110dp"-->
+    <!--android:clipChildren="false"-->
+    <!--android:clipToPadding="false" android:layout_marginBottom="8dp"-->
+    <!--app:layout_constraintBottom_toBottomOf="@+id/padding_right"/>-->
+
+    <!--<com.airbnb.lottie.LottieAnimationView-->
+    <!--android:id="@+id/loading_videos"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:lottie_rawRes="@raw/loader"-->
+    <!--app:lottie_loop="true"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--app:lottie_autoPlay="true"/>-->
+
+
+    <!--<include layout="@layout/activity_main_topbar"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintRight_toRightOf="parent"-->
+    <!--/>-->
+
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

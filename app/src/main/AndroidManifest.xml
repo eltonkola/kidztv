@@ -30,7 +30,7 @@
         </activity>
 
         <activity
-                android:name=".ui.main.MainActivity"
+                android:name=".ui.main.DemoActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/app_name"
                 android:screenOrientation="sensorLandscape"
@@ -41,8 +41,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
 
                 <!-- this is ann app launcher -->
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.HOME"/>
+                <category android:name="android.intent.category.DEFAULT"/>
 
 
                 <!-- start - this is for google app indexing -->
@@ -52,8 +52,8 @@
 
                 <!-- Accepts URIs that begin with "kidztv://launcher" -->
                 <!--<data-->
-                    <!--android:host="launcher"-->
-                    <!--android:scheme="kidztv"  />-->
+                <!--android:host="launcher"-->
+                <!--android:scheme="kidztv"  />-->
                 <!-- end - this is for google app indexing -->
 
             </intent-filter>
