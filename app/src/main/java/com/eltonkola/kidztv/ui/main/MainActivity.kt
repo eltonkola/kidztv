@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -93,23 +92,6 @@ class MainActivity : AppCompatActivity() {
         but_apps.setOnClickListener {
             vm.showApps()
         }
-
-        vm.permissionState.observe(this, Observer {
-            when (it) {
-                MainViewModel.PermissionState.CHECKING -> {
-                }
-                MainViewModel.PermissionState.PERMISSION_OK -> {
-                    vm.reloadVideos()
-                }
-                MainViewModel.PermissionState.PERMISSION_KO -> {
-                    Toast.makeText(this, "No permissions no fun!", Toast.LENGTH_LONG).show()
-                    finish()
-                }
-            }
-
-        })
-
-        vm.checkPermissions(this)
 
 
     }

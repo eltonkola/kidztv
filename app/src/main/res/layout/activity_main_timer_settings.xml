@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/root_timer_settings"
+
+>
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="The app will run for x minutes"
+              android:id="@+id/text_timer"
+              android:textColor="@color/black"
+    />
+
+    <androidx.appcompat.widget.AppCompatSeekBar
+            android:layout_marginTop="16dp"
+            android:id="@+id/seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="180"
+            android:thumb="@drawable/seekbar_thumb"
+            android:progressDrawable="@drawable/seekbar_progress"
+            android:progress="30"
+            android:layout_centerInParent="true"
+    />
+
+</LinearLayout>

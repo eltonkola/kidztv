@@ -46,11 +46,11 @@ class WindowView : RelativeLayout {
         }
 
         close.visibility = View.GONE
-
+        close.setOnClickListener { onClose.invoke() }
 
     }
 
-
+    var onClose: () -> Unit = {}
     var onDone: () -> Unit = {}
 
     private var onTick: () -> Unit = {
