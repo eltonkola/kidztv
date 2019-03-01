@@ -10,18 +10,11 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.snackbar.Snackbar
-
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    lateinit var vm: MainViewModel
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,24 +24,6 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = resources.getString(R.string.app_name)
-
-
-        vm = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        vm.permissionState.observe(this, Observer {
-            when (it) {
-                MainViewModel.PermissionState.CHECKING -> {
-                }
-                MainViewModel.PermissionState.PERMISSION_OK -> {
-                }
-                MainViewModel.PermissionState.PERMISSION_KO -> {
-                    Toast.makeText(this, "No permissions, no fun!", Toast.LENGTH_LONG).show()
-                    finish()
-                }
-            }
-
-        })
-
-        vm.checkPermissions(this)
 
 
         fab.setOnClickListener { view ->
@@ -89,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun download(){
+    fun download() {
         var urlLoad = webview.url
         urlLoad = urlLoad.replace("http://m.", "http://")
         urlLoad = urlLoad.replace("https://m.", "https://")
@@ -105,8 +80,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    lateinit var butBack : MenuItem
-    lateinit var butForward : MenuItem
+    lateinit var butBack: MenuItem
+    lateinit var butForward: MenuItem
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -117,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    fun updateNavigation(){
+    fun updateNavigation() {
         butBack.isEnabled = webview.canGoBack()
         butForward.isEnabled = webview.canGoForward()
 
@@ -126,9 +101,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if(webview.canGoBack()){
+        if (webview.canGoBack()) {
             webview.goBack()
-        }else{
+        } else {
             super.onBackPressed()
         }
     }
@@ -144,13 +119,13 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.action_back -> {
-                if(webview.canGoBack()){
+                if (webview.canGoBack()) {
                     webview.goBack()
                 }
                 true
             }
             R.id.action_forward -> {
-                if(webview.canGoForward()){
+                if (webview.canGoForward()) {
                     webview.goForward()
                 }
                 true

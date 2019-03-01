@@ -8,14 +8,14 @@ class SharedPreferencesManager(applicationContext: Context) {
     val PIN_CODE = "com.eltonkola.kidztv.prefs"
     val sharedPreferences = applicationContext.getSharedPreferences(PREFS_FILENAME, 0)
 
-    val hasPin : Boolean get() = getPin() > -1
+    val hasPin: Boolean get() = getPin() > -1
 
-    fun getPin() : Int {
+    fun getPin(): Int {
         return sharedPreferences.getInt(PIN_CODE, -1)
     }
 
     fun setPin(value: Int) {
-        sharedPreferences.edit().putInt(PIN_CODE, value).commit()
+        sharedPreferences.edit().putInt(PIN_CODE, value).apply()
     }
 
 }

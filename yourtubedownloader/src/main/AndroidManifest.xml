@@ -46,10 +46,6 @@
             </intent-filter>
         </activity>
 
-        <service
-                android:name=".DownloadVideoService"
-                android:enabled="true"
-                android:exported="false"/>
 
     </application>
 

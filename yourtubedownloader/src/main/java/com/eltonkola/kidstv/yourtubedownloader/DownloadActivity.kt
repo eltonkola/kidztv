@@ -104,9 +104,18 @@ class DownloadActivity : Activity() {
         mainLayout!!.addView(btn)
     }
 
-    private fun downloadFromUrl(youtubeDlUrl: String, downloadTitle: String, fileName: String) {
-        startService(DownloadVideoService.getDownloadService(this, youtubeDlUrl,downloadTitle, fileName))
+    val DOWNLOAD_URL = "com.eltonkola.kidztv.DOWNLOAD_URL"
+    val TITLE = "com.eltonkola.kidztv.TITLE"
+    val FILE_NAME = "com.eltonkola.kidztv.FILE_NAME"
 
+    val ACTION = "com.eltonkola.kidztv.action.START_DOWNLOAD_SERVICE"
+
+    private fun downloadFromUrl(youtubeDlUrl: String, downloadTitle: String, fileName: String) {
+        val intent = Intent(ACTION)
+        intent.putExtra(DOWNLOAD_URL, youtubeDlUrl)
+        intent.putExtra(TITLE, downloadTitle)
+        intent.putExtra(FILE_NAME, fileName)
+        sendBroadcast(intent)
     }
 
     companion object {

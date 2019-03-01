@@ -1,16 +1,15 @@
-package com.eltonkola.kidstv.yourtubedownloader
+package com.eltonkola.kidztv.downloadmanager
 
 import android.app.DownloadManager
 import android.app.IntentService
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import com.eltonkola.kidztv.data.AppFolder
 
 class DownloadVideoService : IntentService("DownloadVideoService") {
 
-
     private val externalVideoPath: String get() = AppFolder().externalVideoPath
-
 
     override fun onHandleIntent(intent: Intent?) {
         val downloadPath = intent!!.getStringExtra(DOWNLOAD_PATH)
@@ -31,9 +30,9 @@ class DownloadVideoService : IntentService("DownloadVideoService") {
     }
 
     companion object {
-        private val DOWNLOAD_PATH = "com.eltonkola.kidztv.ui.youtube_DOWNLOAD_PATH"
-        private val DOWNLOAD_TITLE = "com.eltonkola.kidztv.ui.DOWNLOAD_TITLE"
-        private val DOWNLOAD_FILE_NAME = "com.eltonkola.kidztv.ui.DOWNLOAD_FILE_NAME"
+        private val DOWNLOAD_PATH = "DOWNLOAD_PATH"
+        private val DOWNLOAD_TITLE = "DOWNLOAD_TITLE"
+        private val DOWNLOAD_FILE_NAME = "DOWNLOAD_FILE_NAME"
 
         fun getDownloadService(
             callingClassContext: Context, downloadPath: String,

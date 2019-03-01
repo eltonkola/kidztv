@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eltonkola.kidztv.R
 import com.eltonkola.kidztv.model.AppElement
 import java.text.SimpleDateFormat
+import java.util.*
 
 
 class SettingsAppListAdapter constructor(context: Context, val editMode: Boolean, val onAction: (AppElement) -> Unit) :
@@ -18,7 +19,7 @@ class SettingsAppListAdapter constructor(context: Context, val editMode: Boolean
 
     private val inflater = LayoutInflater.from(context)
     private var data: List<AppElement> = emptyList()
-    var sdf = SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS")
+    var sdf = SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS", Locale.US)
     override fun getItemCount(): Int {
         return data.size
     }
@@ -37,12 +38,12 @@ class SettingsAppListAdapter constructor(context: Context, val editMode: Boolean
             title.text = elem.title
 
 
-            if(editMode){
+            if (editMode) {
                 subtitle.text = "Added: ${sdf.format(elem.dbModel.enabledDate)}"
                 butDelete.visibility = View.VISIBLE
                 butAdd.visibility = View.GONE
                 butDelete.setOnClickListener { onAction.invoke(elem) }
-            }else{
+            } else {
                 subtitle.text = "Added: ${elem.dbModel.packageName}"
                 butDelete.visibility = View.GONE
                 butAdd.visibility = View.VISIBLE

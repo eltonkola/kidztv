@@ -2,16 +2,19 @@ package com.eltonkola.kidztv
 
 
 import android.app.Application
+import android.content.IntentFilter
 import android.util.Log
 import androidx.room.Room
 import com.eltonkola.kidztv.data.AppManager
 import com.eltonkola.kidztv.data.SharedPreferencesManager
 import com.eltonkola.kidztv.data.VideoManager
 import com.eltonkola.kidztv.data.db.AppDatabase
+import com.eltonkola.kidztv.downloadmanager.DownloadReceiver
 import com.eltonkola.kidztv.ui.main.MainViewModel
 import com.eltonkola.kidztv.ui.main.apps.AppsViewModel
 import com.eltonkola.kidztv.ui.main.lock.LockViewModel
 import com.eltonkola.kidztv.ui.main.timer.TimerViewModel
+import com.eltonkola.kidztv.ui.openVideoPlugin.SampleVideoViewModel
 import com.eltonkola.kidztv.ui.settings.appmanager.AppManagerViewModel
 import com.eltonkola.kidztv.ui.settings.appmanager.add.AddAppsViewModel
 import com.eltonkola.kidztv.ui.settings.pin.PinViewModel
@@ -41,6 +44,9 @@ class MainApp : Application() {
                 }
             })
         }
+
+        val receiver = DownloadReceiver()
+        registerReceiver(receiver, IntentFilter("com.eltonkola.kidztv.action.START_DOWNLOAD_SERVICE"))
     }
 
 
@@ -74,6 +80,8 @@ class MainApp : Application() {
         viewModel { MainViewModel(get(), get(), get()) }
 
         viewModel { ViewManagerViewModel(applicationContext, get()) }
+
+        viewModel { SampleVideoViewModel() }
 
 
     }
