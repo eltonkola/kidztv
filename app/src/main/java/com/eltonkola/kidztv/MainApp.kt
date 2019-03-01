@@ -81,7 +81,7 @@ class MainApp : Application() {
 
         viewModel { ViewManagerViewModel(applicationContext, get()) }
 
-        viewModel { SampleVideoViewModel() }
+        viewModel { SampleVideoViewModel(get()) }
 
 
     }

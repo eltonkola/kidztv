@@ -2,7 +2,7 @@ package com.eltonkola.kidztv.ui.openVideoPlugin
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.eltonkola.kidztv.model.VideoElement
+import com.eltonkola.kidztv.data.VideoManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.reactivex.Single
@@ -14,30 +14,41 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
 
-class SampleVideoViewModel : ViewModel() {
+class SampleVideoViewModel(private val videoManager: VideoManager) : ViewModel() {
 
     val loading = MutableLiveData<Boolean>()
-    var videos = MutableLiveData<List<VideoElement>>()
+    val error = MutableLiveData<Boolean>()
+    var videos = MutableLiveData<List<OpenVideoElement>>()
     private val compositeDisposable = CompositeDisposable()
 
     init {
         reloadVideos()
     }
 
-    private fun reloadVideos() {
+    fun reloadVideos() {
+        loading.postValue(true)
         compositeDisposable.add(getVideos().subscribe(
-            { videos ->
-                Timber.i("@@@ videos: ${videos.size}")
+            { data ->
+                Timber.i("@@@ videos: ${data.size}")
 
+                val normalizedData = data.map {
+                    it.alreadyDownloaded = videoManager.alreadyDownloaded(it.getFileName())
+                    it
+                }
+
+                videos.postValue(normalizedData)
+                loading.postValue(false)
             },
             { t ->
                 Timber.e(t)
+                loading.postValue(false)
+                error.postValue(true)
             }
         ))
 
     }
 
-    private val DATA_URL = "fakeurl"
+    private val DATA_URL = "https://raw.githubusercontent.com/eltonkola/kidztv/master/open_videos/videos.json"
 
     private fun getVideos(): Single<List<OpenVideoElement>> {
         return Single.create<List<OpenVideoElement>> { emitter ->

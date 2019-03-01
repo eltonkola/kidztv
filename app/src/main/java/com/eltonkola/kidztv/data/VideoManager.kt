@@ -1,35 +1,16 @@
 package com.eltonkola.kidztv.data
 
-import android.app.Application
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.content.pm.ActivityInfo
-import com.eltonkola.kidztv.data.db.AppDatabase
-import com.eltonkola.kidztv.model.AppElement
-import com.eltonkola.kidztv.model.settings.SettingsMenuItem
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import java.util.*
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.MediaMetadataRetriever
-import android.media.ThumbnailUtils
-import android.os.Build
-import android.provider.MediaStore
 import com.eltonkola.kidztv.R
 import com.eltonkola.kidztv.model.VideoElement
-import com.eltonkola.kidztv.model.db.UserApp
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import wseemann.media.FFmpegMediaMetadataRetriever
 import java.io.File
-import java.lang.Exception
 
 
 class VideoManager(private val context: Context) {
@@ -86,13 +67,13 @@ class VideoManager(private val context: Context) {
 //        return defaultArt
         val mmr = FFmpegMediaMetadataRetriever()
 
-        return  try{
+        return try {
             mmr.setDataSource(file.absolutePath)
             mmr.getFrameAtTime(1, FFmpegMediaMetadataRetriever.OPTION_CLOSEST)
-        }catch (e: Exception){
-             defaultArt
-         } finally {
-             mmr.release()
+        } catch (e: Exception) {
+            defaultArt
+        } finally {
+            mmr.release()
         }
 
 
@@ -104,5 +85,10 @@ class VideoManager(private val context: Context) {
     }
 
     private val defaultArt = BitmapFactory.decodeResource(context.resources, R.drawable.default_thumnail)
+
+    fun alreadyDownloaded(fileName: String): Boolean {
+        val file = File(sdCardPath, fileName)
+        return file.exists()
+    }
 
 }

@@ -8,12 +8,28 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:windowActionBar="false"
-        android:background="@color/black"
+        android:background="@drawable/main_bg"
         tools:context=".ui.openVideoPlugin.SampleVideoActivity"
 >
 
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/toolbar_container"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@+id/toolbar_container"
             android:id="@+id/video_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
