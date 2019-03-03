@@ -11,7 +11,7 @@ data going to anyone server, cause the only person checking in your kids, should
 <a style="margin-bottom: 0;" href='https://play.google.com/store/apps/details?id=com.eltonkola.kidztv'>
   <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80px"/></a>
 
-[![CircleCI](https://circleci.com/gh/eltonkola/kidztv.svg?style=svg)](https://circleci.com/gh/eltonkola/kidztv)
+[![CircleCI](https://circleci.com/gh/eltonkola/kidztv.svg?style=svg)](https://circleci.com/gh/eltonkola/kidztv) [![Join the chat at https://gitter.im/kidztv/community](https://badges.gitter.im/kidztv/community.svg)](https://gitter.im/kidztv/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # documentation
 Please check the wiki: https://github.com/eltonkola/kidztv/wiki
