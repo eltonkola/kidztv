@@ -79,6 +79,18 @@
                 android:layout_height="match_parent"
                 android:gravity="center"/>
 
+        <ImageView
+                android:layout_marginTop="30dp"
+                android:id="@+id/imagePreview"
+                android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:background="@drawable/tv_logo"
+                   android:scaleX="1.5"
+                   android:scaleY="1.5"
+                android:layout_centerInParent="true"
+                   android:scaleType="centerInside"
+        />
+
         <FrameLayout
                 android:id="@+id/extra_ui_container"
                 android:layout_width="match_parent"
