@@ -22,7 +22,7 @@ class SplashActivity : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_splash)
         supportActionBar?.hide()
 
         val rxPermissions = RxPermissions(this)

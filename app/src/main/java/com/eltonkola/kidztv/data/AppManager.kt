@@ -15,12 +15,14 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import com.eltonkola.kidztv.model.db.UserApp
+import com.eltonkola.kidztv.ui.openVideoPlugin.SampleVideoActivity
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import java.lang.Exception
 
 
-class AppManager(applicationContext: Context, private val appDatabase: AppDatabase) {
+class AppManager(private val applicationContext: Context,
+                 private val appDatabase: AppDatabase) {
 
     //will use this to list all installed apps plugins
     private val APP_PLUGIN = "com.eltonkola.kidstv.plugin.PLUGIN_APPLICATION"
@@ -73,19 +75,34 @@ class AppManager(applicationContext: Context, private val appDatabase: AppDataba
         Collections.sort(resolveInfos, ResolveInfo.DisplayNameComparator(pm))
 
         if (resolveInfos.size > 0) {
-            val launchable = resolveInfos[0]
-            val activity = launchable.activityInfo
-            val name = ComponentName(
-                activity.applicationInfo.packageName,
-                activity.name
-            )
-            intent = Intent(Intent.ACTION_MAIN)
+//            val launchable = resolveInfos
+//                .firstOrNull { it.activityInfo.name == "com.eltonkola.kidztv.ui.openVideoPlugin.SampleVideoActivity" }
+//                ?: resolveInfos[0]
 
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-            intent.component = name
+            if(isOpenPlugin(resolveInfos)) {
+                intent = Intent(applicationContext, SampleVideoActivity::class.java)
+            }else{
+                val launchable = if (resolveInfos.size > 1) resolveInfos[1] else resolveInfos[0]
 
+
+                val activity = launchable.activityInfo
+                val name = ComponentName(
+                    activity.applicationInfo.packageName,
+                    activity.name
+                )
+                intent = Intent()
+
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+                intent.component = name
+            }
         }
         return intent
+    }
+
+    fun isOpenPlugin(resolveInfos : List<ResolveInfo>) : Boolean {
+         return resolveInfos
+                .filter{ it.activityInfo.name == "com.eltonkola.kidztv.ui.openVideoPlugin.SampleVideoActivity" }
+                .isNotEmpty()
     }
 
     /*
