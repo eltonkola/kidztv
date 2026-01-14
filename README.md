@@ -26,11 +26,19 @@ Get the latest APK from our [GitHub Releases](https://github.com/eltonkola/kidzt
 
 ## 📱 Screenshots
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-  <img src="/fires/Screenshot_1.png" alt="Home Screen" width="50%"/>
-  <img src="/fires/Screenshot_2.png" alt="Video Playback" width="50%"/>
-  <img src="/fires/Screenshot_3.png" alt="Parental Controls" width="50%"/>
-  <img src="/fires/Screenshot_4.png" alt="Parental Controls" width="50%"/>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 1000px; margin: 0 auto;">
+  <div style="flex: 0 0 calc(50% - 10px); max-width: calc(50% - 10px); padding: 5px;">
+    <img src="/fires/Screenshot_1.png" alt="Home Screen" style="width: 100%; height: auto; border-radius: 8px;"/>
+  </div>
+  <div style="flex: 0 0 calc(50% - 10px); max-width: calc(50% - 10px); padding: 5px;">
+    <img src="/fires/Screenshot_2.png" alt="Video Playback" style="width: 100%; height: auto; border-radius: 8px;"/>
+  </div>
+  <div style="flex: 0 0 calc(50% - 10px); max-width: calc(50% - 10px); padding: 5px;">
+    <img src="/fires/Screenshot_3.png" alt="Parental Controls" style="width: 100%; height: auto; border-radius: 8px;"/>
+  </div>
+  <div style="flex: 0 0 calc(50% - 10px); max-width: calc(50% - 10px); padding: 5px;">
+    <img src="/fires/Screenshot_4.png" alt="Parental Controls" style="width: 100%; height: auto; border-radius: 8px;"/>
+  </div>
 </div>
 
 ## 📝 How to Use
