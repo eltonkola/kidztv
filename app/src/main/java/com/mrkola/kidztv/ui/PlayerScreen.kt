@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -158,9 +159,6 @@ fun PlayerScreen(
                             )
                         }
                     },
-                    update = {
-                        it.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT)
-                    },
                     modifier = Modifier.fillMaxSize()
                 )
 
@@ -193,7 +191,7 @@ fun PlayerScreen(
                                 .background(Color.White.copy(alpha = 0.2f), CircleShape)
                         ) {
                             Icon(
-                                Icons.Default.ArrowBack,
+                                Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back",
                                 tint = Color.White,
                                 modifier = Modifier.size(24.dp)

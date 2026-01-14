@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Download
@@ -40,8 +41,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -52,6 +53,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -62,7 +64,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -71,9 +72,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.mrkola.kidztv.data.Video
-import com.mrkola.kidztv.data.VideoDownloader
 import org.koin.androidx.compose.koinViewModel
-import org.schabi.newpipe.extractor.NewPipe
 import java.io.File
 import kotlin.math.log10
 import kotlin.math.pow
@@ -149,7 +148,7 @@ fun ParentalControlsScreen(
                             IconButton(
                                 onClick = onBack,
                             ) {
-                                Icon(Icons.Default.ArrowBack, contentDescription = null)
+                                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                             }
                             Text(
                                 text = "Downloaded Videos (${videos.size})",
@@ -244,7 +243,7 @@ fun ParentalControlsScreen(
                                         }
                                     },
                                     enabled = searchQuery.isNotBlank() && !isSearching,
-                                    modifier = Modifier.height(56.dp)
+                                  //  modifier = Modifier.height(56.dp)
                                 ) {
                                     if (isSearching) {
                                         CircularProgressIndicator(
@@ -289,7 +288,7 @@ fun ParentalControlsScreen(
                             Spacer(modifier = Modifier.height(8.dp))
                         }
 
-                        Divider()
+                        HorizontalDivider()
 
                         Spacer(modifier = Modifier.height(8.dp))
 
@@ -361,7 +360,7 @@ fun ParentalControlsScreen(
                         )
                     ) {
                         Icon(
-                            Icons.Default.ArrowBack,
+                            Icons.Filled.ArrowBack,
                             contentDescription = null,
                             tint = Color.White
                         )
@@ -472,7 +471,7 @@ fun ParentalControlsScreen(
                             Spacer(modifier = Modifier.height(8.dp))
                         }
 
-                        Divider()
+                        VerticalDivider()
 
                         Spacer(modifier = Modifier.height(8.dp))
 
@@ -712,7 +711,7 @@ fun YouTubeResultCard(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         LinearProgressIndicator(
-                            progress = downloadProgress / 100f,
+                            progress = { downloadProgress / 100f },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(if (isLandscape) 4.dp else 3.dp)

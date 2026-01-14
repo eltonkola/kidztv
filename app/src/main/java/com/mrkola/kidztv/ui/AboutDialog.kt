@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 
 @Composable
 fun AboutDialog(
@@ -100,7 +101,7 @@ fun AboutDialog(
 private fun openGithubRepo(context: Context) {
     val intent = Intent(
         Intent.ACTION_VIEW,
-        Uri.parse("https://github.com/eltonkola/kidztv")
+        "https://github.com/eltonkola/kidztv".toUri()
     )
     context.startActivity(intent)
 }
