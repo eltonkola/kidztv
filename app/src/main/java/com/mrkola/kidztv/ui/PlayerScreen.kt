@@ -411,6 +411,7 @@ fun PlayerScreen(
                         VideoThumbnail(
                             video = video,
                             isSelected = video.id == currentVideo?.id,
+                            duration = video.duration,
                             onClick = {
                                 currentVideo = video
                                 exoPlayer.setMediaItem(MediaItem.fromUri(video.filePath))
@@ -452,7 +453,7 @@ private fun ControlButton(
 }
 
 @Composable
-fun VideoThumbnail(video: Video, isSelected: Boolean, onClick: () -> Unit) {
+fun VideoThumbnail(video: Video, isSelected: Boolean, duration: Long, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .width(160.dp)
@@ -526,6 +527,13 @@ fun VideoThumbnail(video: Video, isSelected: Boolean, onClick: () -> Unit) {
                         .clip(RoundedCornerShape(12.dp))
                 )
             }
+
+            Text(
+                text = formatDuration(duration),
+                color = Color.White,
+                fontSize = 12.sp,
+                modifier = Modifier.align (Alignment.BottomEnd).padding(16.dp)
+            )
         }
 
         Text(

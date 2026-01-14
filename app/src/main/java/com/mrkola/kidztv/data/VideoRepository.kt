@@ -5,20 +5,19 @@ import android.content.Context
 import android.media.MediaMetadataRetriever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.ServiceList
+import org.schabi.newpipe.extractor.downloader.Downloader
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
 
-class VideoRepository(private val context: Context) {
+class VideoRepository(private val context: Context, val downloader: Downloader) {
     private val videosDir = File(context.filesDir, "videos")
     private val thumbnailsDir = File(context.filesDir, "thumbnails")
 
     init {
         videosDir.mkdirs()
         thumbnailsDir.mkdirs()
-        NewPipe.init(VideoDownloader())
     }
 
     fun getAllVideos(): List<Video> {

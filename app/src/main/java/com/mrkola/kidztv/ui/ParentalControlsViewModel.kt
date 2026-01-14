@@ -36,7 +36,7 @@ class ParentalControlsViewModel(
 
     init {
         loadVideos()
-        NewPipe.init(VideoDownloader())
+
     }
 
     fun searchVideos(query: String) {
