@@ -12,4 +12,9 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+ base: '/kidztv/',
+  build: {
+    outDir: '../docs', // Ensure it builds into the docs folder at the root
+    emptyOutDir: true,
+  }
 });
