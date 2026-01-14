@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+
+
 android {
     namespace = "com.mrkola.kidztv"
     compileSdk {
@@ -55,6 +57,30 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.navigation.compose)
+
+    // ExoPlayer
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.common)
+
+    // NewPipe Extractor
+    implementation(libs.newpipeextractor)
+
+    // Coil for image loading
+    implementation(libs.coil.compose)
+    implementation(libs.coil.video)
+
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+
+    //Di
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
