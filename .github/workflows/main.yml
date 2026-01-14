@@ -1,4 +1,4 @@
-name: KidzTV Build and Release
+name: "KidzTV Build and Release"
 
 on:
   workflow_dispatch:
