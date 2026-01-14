@@ -2,6 +2,7 @@
 agp = "8.13.2"
 coilCompose = "2.7.0"
 coilVideo = "2.7.0"
+desugar_jdk_libs_nio = "2.1.5"
 koinAndroid = "4.1.1"
 koinAndroidxCompose = "4.1.1"
 kotlin = "2.3.0"
@@ -28,6 +29,7 @@ androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "medi
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 coil-video = { module = "io.coil-kt:coil-video", version.ref = "coilVideo" }
+desugar_jdk_libs_nio = { module = "com.android.tools:desugar_jdk_libs_nio", version.ref = "desugar_jdk_libs_nio" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
