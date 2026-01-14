@@ -8,7 +8,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
-             src="images/logo.png"
+             src="kidztv/images/logo.png"
               alt="KidzTV Logo"
               className="h-12 w-auto"
               onError={(e) => {
@@ -27,7 +27,7 @@ function App() {
             </div>
           </div>
           <a
-            href="https://github.com/eltonkola/kidztv/releases"
+            href="https://github.com/eltonkola/kidztv/releases/latest/download/app-release-unsigned-signed.apk"
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-2.5 bg-white text-[#EC407A] rounded-full font-medium hover:shadow-xl hover:scale-105 transition-all duration-300"
@@ -61,7 +61,7 @@ function App() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a
-                href="https://github.com/eltonkola/kidztv/releases"
+                href="https://github.com/eltonkola/kidztv/releases/latest/download/app-release-unsigned-signed.apk"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-8 py-4 bg-gradient-to-r from-[#AB47BC] via-[#EC407A] to-[#EF5350] text-white rounded-full font-semibold hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-2"
@@ -100,22 +100,22 @@ function App() {
               {
                 title: 'Home Screen',
                 description: 'Large, colorful buttons easy for kids to tap',
-                image: '/images/screenshots/home.png'
+                image: 'kidztv/images/screenshots/home.png'
               },
               {
                 title: 'Video Playback',
                 description: 'Distraction-free viewing experience',
-                image: '/images/screenshots/playback.png'
+                image: 'images/screenshots/playback.png'
               },
               {
                 title: 'Parental Controls',
                 description: 'Math-based lock protects settings',
-                image: '/images/screenshots/controls.png'
+                image: 'images/screenshots/controls.png'
               },
               {
                 title: 'Video Library',
                 description: 'Simple grid view of all content',
-                image: '/images/screenshots/library.png'
+                image: 'images/screenshots/library.png'
               }
             ].map((screenshot, index) => (
               <div key={index} className="group">
@@ -319,7 +319,7 @@ function App() {
                 Download KidzTV today and give your children a safe, ad-free viewing experience.
               </p>
               <a
-                href="https://github.com/eltonkola/kidztv/releases"
+                href="https://github.com/eltonkola/kidztv/releases/latest/download/app-release-unsigned-signed.apk"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#EC407A] rounded-full font-semibold hover:shadow-2xl hover:scale-105 transition-all duration-300"
@@ -374,7 +374,7 @@ function App() {
                 <Github className="w-5 h-5 text-white" />
               </a>
               <a
-                href="https://github.com/eltonkola/kidztv/releases"
+                href="https://github.com/eltonkola/kidztv/releases/latest/download/app-release-unsigned-signed.apk"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-gray-800 hover:bg-gradient-to-br hover:from-[#AB47BC] hover:to-[#EF5350] flex items-center justify-center transition-all duration-300"
