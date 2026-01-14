@@ -8,7 +8,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
-             src={`${import.meta.env.BASE_URL}images/logo.png`}
+             src="images/logo.png"
               alt="KidzTV Logo"
               className="h-12 w-auto"
               onError={(e) => {
@@ -100,22 +100,22 @@ function App() {
               {
                 title: 'Home Screen',
                 description: 'Large, colorful buttons easy for kids to tap',
-                image: '${import.meta.env.BASE_URL}/images/screenshots/home.png'
+                image: '/images/screenshots/home.png'
               },
               {
                 title: 'Video Playback',
                 description: 'Distraction-free viewing experience',
-                image: '${import.meta.env.BASE_URL}/images/screenshots/playback.png'
+                image: '/images/screenshots/playback.png'
               },
               {
                 title: 'Parental Controls',
                 description: 'Math-based lock protects settings',
-                image: '${import.meta.env.BASE_URL}/images/screenshots/controls.png'
+                image: '/images/screenshots/controls.png'
               },
               {
                 title: 'Video Library',
                 description: 'Simple grid view of all content',
-                image: '${import.meta.env.BASE_URL}/images/screenshots/library.png'
+                image: '/images/screenshots/library.png'
               }
             ].map((screenshot, index) => (
               <div key={index} className="group">
