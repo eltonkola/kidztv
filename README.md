@@ -1,17 +1,28 @@
 
 # about
 
-<img align="center" src="/fires/tv_logo_horizontal.png" alt="KidzTv logo" height="119" width="331"/>
+<img align="center" src="/fires/tv_logo_horizontal.png" alt="KidzTV logo" height="119" width="331"/>
 
-This app is a safe video player/ android launcher with parental control, so you can chose what your kids are
-watching, what apps and games they can use, and how long they can use the device.<br/>
-What makes this app unique, is the fact that it is 100% free and opensource, zero analytics or tracking, zero
-data going to anyone server, cause the only person checking in your kids, should be you.
+**KidzTV**
+
+A safe, offline video player made for kids.
+
+This app lets you download your own videos from YouTube so your kids can watch them quietly offline — without ads, recommendations, or distractions.
+
+> **Note about YouTube videos:** You can upload your own videos to YouTube, make them public temporarily, download them with this app, and then make them private again. Please ensure you only download videos for which you own the rights. The responsibility for respecting copyright laws lies with you.
+
+Parents stay in control with screen locking and protected settings.
+
+100% free and open source. No analytics, no tracking, no data collection.
 
 
-[![CircleCI](https://circleci.com/gh/eltonkola/kidztv.svg?style=svg)](https://circleci.com/gh/eltonkola/kidztv) [![Join the chat at https://gitter.im/kidztv/community](https://badges.gitter.im/kidztv/community.svg)](https://gitter.im/kidztv/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![GitHub release](https://img.shields.io/github/v/release/eltonkola/kidztv?include_prereleases&style=flat-square)](https://github.com/eltonkola/kidztv/releases/latest)
 
-# documentation
+# 📥 Downloads
+
+Get the latest APK from our [GitHub Releases](https://github.com/eltonkola/kidztv/releases/latest) page.
+
+# 📚 Documentation
 Please check the wiki: https://github.com/eltonkola/kidztv/wiki
 
 
