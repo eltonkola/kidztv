@@ -8,7 +8,7 @@
 KidzTV is a parent-controlled video player that lets your children watch videos offline in a safe, distraction-free environment. No ads, no recommendations, and no internet required after setup.
 
 [![GitHub release](https://img.shields.io/github/v/release/eltonkola/kidztv?include_prereleases&style=flat-square)](https://github.com/eltonkola/kidztv/releases/latest)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## 🚀 Features
 
@@ -92,6 +92,19 @@ A: Download the latest APK from GitHub and install it over the existing app.
 
 For support, please [open an issue](https://github.com/eltonkola/kidztv/issues) on GitHub.
 
-## 📄 License
+## Acknowledgements
 
-Copyright 2019 Elton Kola. Licensed under the [Apache License 2.0](LICENSE).
+This project uses [NewPipeExtractor](https://github.com/TeamNewPipe/NewPipeExtractor),  
+which is licensed under the GNU General Public License v3.0.
+
+## License
+
+[![GNU GPLv3](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+
+Copyright © 2019–2026 Elton Kola
+
+This project is free software: you can use, study, share, and improve it at will.  
+Specifically, you can redistribute and/or modify it under the terms of the  
+[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html),  
+as published by the Free Software Foundation, either version 3 of the License,  
+or (at your option) any later version.
