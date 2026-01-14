@@ -57,7 +57,6 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          # Make sure to install the build-tools version you specify
           build-tools-version: '34.0.0'
           ndk-version: '25.2.9519653'
           cmake-version: '3.22.1'
@@ -74,7 +73,6 @@ jobs:
           keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
         env:
-          # This is the key! Set the build-tools version via environment variable
           BUILD_TOOLS_VERSION: "34.0.0"
 
       - name: Upload APK
