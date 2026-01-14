@@ -57,9 +57,13 @@ jobs:
     - name: Set up Android SDK
       uses: android-actions/setup-android@v3
       with:
-        build-tools-version: '34.0.0'
+        build-tools-version: '34.0.0,29.0.3'
         ndk-version: '25.2.9519653'
         cmake-version: '3.22.1'
+    
+    - name: List installed build-tools
+      run: ls -la $ANDROID_HOME/build-tools/
+      shell: bash
         
     - name: Build Release APK
       run: ./gradlew assembleRelease
@@ -72,6 +76,7 @@ jobs:
         alias: ${{ secrets.ANDROID_ALIAS }}
         keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        buildToolsVersion: '34.0.0'
 
     - name: Upload APK
       uses: actions/upload-artifact@v4

@@ -5,43 +5,85 @@
 
 **A safe, offline video player made for kids.**
 
-This app lets you download your own videos from YouTube so your kids can watch them quietly offline — without ads, recommendations, or distractions.
-
-> **Note about YouTube videos:** You can upload your own videos to YouTube, make them public temporarily, download them with this app, and then make them private again. Please ensure you only download videos for which you own the rights. The responsibility for respecting copyright laws lies with you.
-
-Parents stay in control with screen locking and protected settings.
-
-100% free and open source. No analytics, no tracking, no data collection.
-
+KidzTV is a parent-controlled video player that lets your children watch videos offline in a safe, distraction-free environment. No ads, no recommendations, and no internet required after setup.
 
 [![GitHub release](https://img.shields.io/github/v/release/eltonkola/kidztv?include_prereleases&style=flat-square)](https://github.com/eltonkola/kidztv/releases/latest)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-# 📥 Downloads
+## 🚀 Features
+
+- **Ad-free viewing**: No ads or distractions
+- **Offline playback**: Watch videos without an internet connection
+- **Parental controls**: Protected settings with PIN code
+- **Screen locking**: Prevent kids from exiting the app
+- **Simple interface**: Designed specifically for young children
+- **No data collection**: We don't track you or your children
+- **Open source**: Transparent and community-driven development
+
+## 📥 Download
 
 Get the latest APK from our [GitHub Releases](https://github.com/eltonkola/kidztv/releases/latest) page.
 
-# 📱 Screenshots
+## 📱 Screenshots
 
-<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
-  <img src="/fires/Screenshot_1.png" alt="Screenshot 1" width="200"/>
-  <img src="/fires/Screenshot_2.png" alt="Screenshot 2" width="200"/>
-  <img src="/fires/Screenshot_3.png" alt="Screenshot 3" width="200"/>
-  <img src="/fires/Screenshot_4.png" alt="Screenshot 4" width="200"/>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+  <img src="/fires/Screenshot_1.png" alt="Home Screen" width="50%"/>
+  <img src="/fires/Screenshot_2.png" alt="Video Playback" width="50%"/>
+  <img src="/fires/Screenshot_3.png" alt="Parental Controls" width="50%"/>
+  <img src="/fires/Screenshot_4.png" alt="Parental Controls" width="50%"/>
 </div>
 
-# Copyright
+## 📝 How to Use
 
-    Copyright 2019 Elton Kola. All rights reserved.
+1. **Download videos**:
+   - Upload your videos to YouTube (can be private/unlisted)
+   - Use the app to download them for offline viewing
+   - Make videos private again on YouTube if desired
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+2. **Parental controls**:
+   - Set up a PIN in the settings
+   - Lock the screen to keep kids in the app
+   - Manage video content easily
 
-        http://www.apache.org/licenses/LICENSE-2.0
+3. **For your children**:
+   - Simple interface with large buttons
+   - No ads or external links
+   - Safe, curated content only
 
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-    
+> **Note about YouTube videos:** Ensure you only download videos for which you own the rights. The responsibility for respecting copyright laws lies with you.
+
+## 🔒 Privacy
+
+We take privacy seriously:
+- No analytics or tracking
+- No data collection
+- No internet permission required after setup
+- All videos stored locally on device
+
+## 🛠 Building from Source
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/eltonkola/kidztv.git
+   ```
+2. Open the project in Android Studio
+3. Build and run on your device or emulator
+
+## ❓ FAQ
+
+**Q: Is an internet connection required?**  
+A: Only for downloading videos. Playback works offline.
+
+**Q: Can I use any YouTube video?**  
+A: Only download videos you have the rights to, such as your own content.
+
+**Q: How do I update the app?**  
+A: Download the latest APK from GitHub and install it over the existing app.
+
+## 💬 Support
+
+For support, please [open an issue](https://github.com/eltonkola/kidztv/issues) on GitHub.
+
+## 📄 License
+
+Copyright 2019 Elton Kola. Licensed under the [Apache License 2.0](LICENSE).
