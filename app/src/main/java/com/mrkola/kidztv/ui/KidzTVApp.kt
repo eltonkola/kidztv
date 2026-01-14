@@ -18,9 +18,7 @@ fun KidzTVApp(
     LaunchedEffect(Unit) {
         val videos = videoRepository.getAllVideos()
         if (videos.isEmpty()) {
-            navController.navigate("math_challenge") {
-                popUpTo("main") { inclusive = true }
-            }
+            navController.navigate("math_challenge")
         }
     }
 
