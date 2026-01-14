@@ -471,7 +471,7 @@ fun ParentalControlsScreen(
                             Spacer(modifier = Modifier.height(8.dp))
                         }
 
-                        VerticalDivider()
+                        HorizontalDivider()
 
                         Spacer(modifier = Modifier.height(8.dp))
 

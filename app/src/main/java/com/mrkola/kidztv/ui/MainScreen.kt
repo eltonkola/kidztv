@@ -83,7 +83,7 @@ fun MainScreen(
                 Image(
                     painter = painterResource(R.drawable.tv_logo_horizontal),
                     contentDescription = "KidzTV",
-                    modifier = Modifier
+                    modifier = Modifier.height(40.dp)
                 )
 
                 IconButton (
@@ -128,7 +128,7 @@ fun MainScreen(
 fun VideoCard(video: Video, onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth().height(200.dp)
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(18.dp),
         elevation = CardDefaults.cardElevation(8.dp)
