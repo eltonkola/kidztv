@@ -1,6 +1,7 @@
 package com.mrkola.kidztv.ui
 
 
+import android.graphics.Shader
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,9 +17,19 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.RenderEffect
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.asComposeRenderEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +38,14 @@ import coil.compose.rememberAsyncImagePainter
 import com.mrkola.kidztv.R
 import com.mrkola.kidztv.data.Video
 import com.mrkola.kidztv.data.VideoRepository
+
+val gbGradient =  Brush.verticalGradient(
+    colors = listOf(
+        Color(0xFFAB47BC),
+        Color(0xFFEC407A),
+        Color(0xFFEF5350)
+    )
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,15 +59,7 @@ fun MainScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFFAB47BC),
-                        Color(0xFFEC407A),
-                        Color(0xFFEF5350)
-                    )
-                )
-            )
+            .background(gbGradient)
     ) {
         Column(
             modifier = Modifier
@@ -62,7 +73,8 @@ fun MainScreen(
             ) {
                 Image(
                     painter = painterResource(R.drawable.tv_logo_horizontal),
-                    contentDescription = "KidzTV"
+                    contentDescription = "KidzTV",
+                    modifier = Modifier
                 )
 
                 IconButton (
@@ -90,7 +102,7 @@ fun MainScreen(
                 }
             } else {
                 LazyVerticalGrid(
-                    columns = GridCells.Adaptive(minSize = 200.dp),
+                    columns = GridCells.Adaptive(minSize = 180.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
@@ -109,20 +121,20 @@ fun VideoCard(video: Video, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(18.dp),
         elevation = CardDefaults.cardElevation(8.dp)
     ) {
         Column {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
                 if (video.thumbnailPath != null) {
                     Image(
                         painter = rememberAsyncImagePainter(video.thumbnailPath),
                         contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxWidth()
+                            .aspectRatio(16f / 9f)
+                        ,
                         contentScale = ContentScale.Crop
                     )
                 } else {
@@ -167,10 +179,3 @@ fun VideoCard(video: Video, onClick: () -> Unit) {
         }
     }
 }
-
-//fun formatDuration(millis: Long): String {
-//    val seconds = (millis / 1000).toInt()
-//    val minutes = seconds / 60
-//    val secs = seconds % 60
-//    return String.format("%d:%02d", minutes, secs)
-//}
