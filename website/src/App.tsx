@@ -100,7 +100,7 @@ function App() {
               {
                 title: 'Home Screen',
                 description: 'Large, colorful buttons easy for kids to tap',
-                image: 'kidztv/images/screenshots/home.png'
+                image: 'images/screenshots/home.png'
               },
               {
                 title: 'Video Playback',
