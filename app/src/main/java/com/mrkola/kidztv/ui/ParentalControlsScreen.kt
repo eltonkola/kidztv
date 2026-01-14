@@ -41,6 +41,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -54,7 +55,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,7 +68,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.mrkola.kidztv.data.Video
 import com.mrkola.kidztv.data.VideoDownloader
-import com.mrkola.kidztv.data.VideoRepository
 import org.koin.androidx.compose.koinViewModel
 import org.schabi.newpipe.extractor.NewPipe
 import java.io.File
@@ -87,7 +86,6 @@ data class YouTubeSearchResult(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ParentalControlsScreen(
-    videoRepository: VideoRepository,
     onBack: () -> Unit,
     viewModel: ParentalControlsViewModel = koinViewModel()
 ) {
@@ -95,10 +93,10 @@ fun ParentalControlsScreen(
     val searchResults by viewModel.searchResults.collectAsState()
     val isSearching by viewModel.isSearching.collectAsState()
     var showAbout by remember { mutableStateOf(false) }
-    var selectedVideos by remember { mutableStateOf<Set<String>>(emptySet()) }
-    var downloadingUrls by remember { mutableStateOf<Set<String>>(emptySet()) }
-    var videos by remember { mutableStateOf(videoRepository.getAllVideos()) }
-    val scope = rememberCoroutineScope()
+    val selectedVideos by viewModel.selectedVideos.collectAsState()
+    val downloadingUrls by viewModel.downloadingUrls.collectAsState()
+    val videos by viewModel.videos.collectAsState()
+
     val snackbarHostState = remember { SnackbarHostState() }
 
     // Handle error messages from ViewModel
@@ -128,7 +126,7 @@ fun ParentalControlsScreen(
                 .padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Left Side - YouTube Search & Results
+            // Left Side - Downloaded Videos
             Card(
                 modifier = Modifier
                     .weight(1f)
@@ -141,82 +139,129 @@ fun ParentalControlsScreen(
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    // Header
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        IconButton(
+                            onClick = onBack,
+                        ) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = null)
+                        }
                         Text(
-                            text = "🔍 Search YouTube",
+                            text = "Downloaded Videos (${videos.size})",
                             style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.weight(1f)
                         )
 
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            IconButton(
-                                onClick = { showAbout = true },
-                                modifier = Modifier.background(
-                                    Color(0xFF1A237E).copy(alpha = 0.1f),
-                                    RoundedCornerShape(50)
-                                )
-                            ) {
-                                Icon(
-                                    Icons.Default.Info,
-                                    contentDescription = "About",
-                                    tint = Color(0xFF1A237E)
-                                )
-                            }
-
-                            Button(
-                                onClick = onBack,
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xFF1A237E)
-                                )
-                            ) {
-                                Icon(Icons.Default.ArrowBack, contentDescription = null)
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text("Back to Videos")
-                            }
+                        IconButton(
+                            onClick = { showAbout = true },
+                            modifier = Modifier.background(
+                                Color(0xFF1A237E).copy(alpha = 0.1f),
+                                RoundedCornerShape(50)
+                            )
+                        ) {
+                            Icon(
+                                Icons.Default.Info,
+                                contentDescription = "About",
+                                tint = Color(0xFF1A237E)
+                            )
                         }
+
+
                     }
+
+
 
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    if (videos.isEmpty()) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Icon(
+                                    Icons.Default.VideoLibrary,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(64.dp),
+                                    tint = Color.Gray
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(
+                                    text = "No videos downloaded yet",
+                                    color = Color.Gray,
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                            }
+                        }
+                    } else {
+                        LazyColumn(
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            items(videos) { video ->
+                                DownloadedVideoCard(
+                                    video = video,
+                                    onDelete = {
+                                        viewModel.deleteVideo(video)
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Right Side - YouTube Search & Results
+            Card(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+
                     // Search Bar
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
+
                         OutlinedTextField(
                             value = searchQuery,
                             onValueChange = { searchQuery = it },
-                            label = { Text("Search for kids videos...") },
-                            modifier = Modifier.weight(1f),
+                            label = { Text("Search videos...") },
+                            modifier = Modifier.fillMaxWidth(),
                             enabled = !isSearching,
                             singleLine = true,
                             leadingIcon = {
                                 Icon(Icons.Default.Search, contentDescription = null)
+                            },
+                            trailingIcon = {
+                                Button(
+                                    onClick = {
+                                        if(!isSearching) {
+                                            viewModel.searchVideos(searchQuery)
+                                        }
+                                    },
+                                    enabled = searchQuery.isNotBlank() && !isSearching,
+                                    modifier = Modifier.height(56.dp)
+                                ) {
+                                    if (isSearching) {
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.size(24.dp),
+                                            color = Color.White
+                                        )
+                                    } else {
+                                        Icon(Icons.Default.Search, contentDescription = null)
+                                    }
+                                }
                             }
                         )
 
-                        Button(
-                            onClick = { viewModel.searchVideos(searchQuery) },
-                            enabled = searchQuery.isNotBlank() && !isSearching,
-                            modifier = Modifier.height(56.dp)
-                        ) {
-                            if (isSearching) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(24.dp),
-                                    color = Color.White
-                                )
-                            } else {
-                                Icon(Icons.Default.Search, contentDescription = null)
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text("Search")
-                            }
-                        }
-                    }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -274,21 +319,26 @@ fun ParentalControlsScreen(
                                 )
                             }
                         }
+
                     } else {
+
+
+                        val downloadProgress by viewModel.downloadProgress.collectAsState()
+
+
                         LazyColumn(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
+
                             items(searchResults) { result ->
+                                val progress = downloadProgress[result.url] ?: 0
                                 YouTubeResultCard(
                                     result = result,
                                     isSelected = selectedVideos.contains(result.url),
                                     isDownloading = downloadingUrls.contains(result.url),
+                                    downloadProgress = progress,
                                     onToggleSelect = {
-                                        selectedVideos = if (selectedVideos.contains(result.url)) {
-                                            selectedVideos - result.url
-                                        } else {
-                                            selectedVideos + result.url
-                                        }
+                                        viewModel.toggleVideoSelection(result.url)
                                     },
                                     onDownload = { viewModel.downloadVideo(result.url) }
                                 )
@@ -298,64 +348,7 @@ fun ParentalControlsScreen(
                 }
             }
 
-            // Right Side - Downloaded Videos
-            Card(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                ) {
-                    Text(
-                        text = "📁 Downloaded Videos (${videos.size})",
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold
-                    )
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    if (videos.isEmpty()) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Icon(
-                                    Icons.Default.VideoLibrary,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(64.dp),
-                                    tint = Color.Gray
-                                )
-                                Spacer(modifier = Modifier.height(16.dp))
-                                Text(
-                                    text = "No videos downloaded yet",
-                                    color = Color.Gray,
-                                    style = MaterialTheme.typography.bodyLarge
-                                )
-                            }
-                        }
-                    } else {
-                        LazyColumn(
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            items(videos) { video ->
-                                DownloadedVideoCard(
-                                    video = video,
-                                    onDelete = {
-                                        videoRepository.deleteVideo(video)
-                                        videos = videoRepository.getAllVideos()
-                                    }
-                                )
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         // Snackbar for showing error messages
@@ -377,6 +370,7 @@ fun YouTubeResultCard(
     result: YouTubeSearchResult,
     isSelected: Boolean,
     isDownloading: Boolean,
+    downloadProgress: Int = 0,
     onToggleSelect: () -> Unit,
     onDownload: () -> Unit
 ) {
@@ -481,16 +475,34 @@ fun YouTubeResultCard(
                         color = Color.Gray
                     )
                 }
+
+                if (isDownloading) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    ) {
+                        LinearProgressIndicator(
+                            progress = downloadProgress / 100f,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(4.dp)
+                        )
+                        Text(
+                            text = "$downloadProgress%",
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+
+
             }
 
             // Download Button
             if (isDownloading) {
-                Box(
-                    modifier = Modifier.size(40.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
-                }
+                    CircularProgressIndicator()
             } else {
                 IconButton(
                     onClick = onDownload,

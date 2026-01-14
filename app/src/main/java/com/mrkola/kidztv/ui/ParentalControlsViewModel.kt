@@ -82,18 +82,29 @@ class ParentalControlsViewModel(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
+    private val _downloadProgress = MutableStateFlow<Map<String, Int>>(emptyMap())
+    val downloadProgress: StateFlow<Map<String, Int>> = _downloadProgress.asStateFlow()
+
     fun downloadVideo(url: String) {
         viewModelScope.launch {
             _downloadingUrls.value = _downloadingUrls.value + url
             _errorMessage.value = null
             try {
-                videoRepository.downloadVideo(url).onSuccess {
+                videoRepository.downloadVideo(
+                    url = url,
+                    onProgress = { progress ->
+                        _downloadProgress.value = _downloadProgress.value + (url to progress)
+                    }
+                ).onSuccess {
                     loadVideos()
+                    _downloadProgress.value = _downloadProgress.value - url
                 }.onFailure {
                     _errorMessage.value = "Failed to download video: ${it.message ?: "Unknown error"}"
+                    _downloadProgress.value = _downloadProgress.value - url
                 }
             } catch (e: Exception) {
                 _errorMessage.value = "Error during download: ${e.message ?: "Unknown error"}"
+                _downloadProgress.value = _downloadProgress.value - url
             } finally {
                 _downloadingUrls.value = _downloadingUrls.value - url
                 _selectedVideos.value = _selectedVideos.value - url

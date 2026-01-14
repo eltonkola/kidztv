@@ -62,7 +62,6 @@ fun KidzTVApp() {
 
         composable("parental") {
             ParentalControlsScreen(
-                videoRepository = videoRepository,
                 onBack = { navController.popBackStack() }
             )
         }

@@ -61,8 +61,9 @@ class VideoRepository(private val context: Context) {
             val thumbnailFile = File(thumbnailsDir, "$videoId.jpg")
 
             // Download video
-            downloadFile(bestStream.content, videoFile, onProgress)
-
+            downloadFileWithProgress(bestStream.content, videoFile) { progress ->
+                onProgress(progress)
+            }
             // Download thumbnail
             extractor.thumbnails.firstOrNull()?.let { thumbnail ->
                 downloadFile(thumbnail.url, thumbnailFile)
@@ -98,6 +99,37 @@ class VideoRepository(private val context: Context) {
                     totalBytes += bytesRead
                 }
             }
+        }
+    }
+
+    private suspend fun downloadFileWithProgress(
+        url: String,
+        destination: File,
+        onProgress: (Int) -> Unit
+    ) = withContext(Dispatchers.IO) {
+        val connection = URL(url).openConnection()
+        connection.connect()
+
+        val fileLength = connection.contentLengthLong
+        val input = connection.getInputStream()
+        val output = FileOutputStream(destination)
+
+        try {
+            val data = ByteArray(1024)
+            var total: Long = 0
+            var count: Int
+
+            while (input.read(data).also { count = it } != -1) {
+                total += count.toLong()
+                val progress = ((total * 100) / fileLength).toInt()
+                withContext(Dispatchers.Main) {
+                    onProgress(progress)
+                }
+                output.write(data, 0, count)
+            }
+        } finally {
+            input.close()
+            output.close()
         }
     }
 
