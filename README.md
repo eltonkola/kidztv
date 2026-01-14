@@ -1,11 +1,9 @@
 
-# about
+# KidzTV
 
 <img align="center" src="/fires/tv_logo_horizontal.png" alt="KidzTV logo" height="119" width="331"/>
 
-**KidzTV**
-
-A safe, offline video player made for kids.
+**A safe, offline video player made for kids.**
 
 This app lets you download your own videos from YouTube so your kids can watch them quietly offline — without ads, recommendations, or distractions.
 
@@ -22,9 +20,14 @@ Parents stay in control with screen locking and protected settings.
 
 Get the latest APK from our [GitHub Releases](https://github.com/eltonkola/kidztv/releases/latest) page.
 
-# 📚 Documentation
-Please check the wiki: https://github.com/eltonkola/kidztv/wiki
+# 📱 Screenshots
 
+<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+  <img src="/fires/Screenshot_1.png" alt="Screenshot 1" width="200"/>
+  <img src="/fires/Screenshot_2.png" alt="Screenshot 2" width="200"/>
+  <img src="/fires/Screenshot_3.png" alt="Screenshot 3" width="200"/>
+  <img src="/fires/Screenshot_4.png" alt="Screenshot 4" width="200"/>
+</div>
 
 # Copyright
 
