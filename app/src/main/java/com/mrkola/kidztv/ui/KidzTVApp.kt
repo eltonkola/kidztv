@@ -27,7 +27,7 @@ fun KidzTVApp(
         }
 
         composable("player/{videoId}") { backStackEntry ->
-            val videoId = backStackEntry.arguments?.getString("videoId")?.toLongOrNull()
+            val videoId = backStackEntry.arguments?.getString("videoId").toString()
             videoId?.let {
                 PlayerScreen(
                     initialVideoId = it,

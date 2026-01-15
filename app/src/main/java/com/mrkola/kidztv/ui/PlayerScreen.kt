@@ -77,7 +77,7 @@ import org.koin.core.parameter.parametersOf
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PlayerScreen(
-    initialVideoId: Long,
+    initialVideoId: String,
     onBack: () -> Unit,
     viewModel: PlayerViewModel = koinViewModel(parameters = { parametersOf(initialVideoId) })
 ) {
