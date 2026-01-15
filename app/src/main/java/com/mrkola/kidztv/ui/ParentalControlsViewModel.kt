@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.ServiceList
+import org.schabi.newpipe.extractor.search.SearchExtractor
 import org.schabi.newpipe.extractor.search.SearchInfo
 import org.schabi.newpipe.extractor.stream.StreamInfoItem
 import kotlin.String
@@ -46,31 +47,63 @@ class ParentalControlsViewModel(
         }
     }
 
-    fun searchVideos(query: String) {
+    private var currentSearchExtractor: SearchExtractor? = null
+
+    fun searchVideos(query: String, loadNextPage: Boolean = false) {
         if (query.isBlank()) return
 
         viewModelScope.launch(Dispatchers.IO) {
             _isSearching.value = true
             try {
-                val searchInfo = SearchInfo.getInfo(
-                    ServiceList.YouTube,
-                    ServiceList.YouTube.searchQHFactory.fromQuery(query)
-                )
+                val extractor = if (loadNextPage) {
+                    currentSearchExtractor?.let { currentExtractor ->
+                        ServiceList.YouTube.getSearchExtractor(
+                            ServiceList.YouTube.searchQHFactory.fromQuery(query)
+                        ).also {
+                            it.fetchPage() // This will load the next page if the extractor is stateful
+                            currentSearchExtractor = it
+                        }
+                    }
+                } else {
+                    ServiceList.YouTube.getSearchExtractor(
+                        ServiceList.YouTube.searchQHFactory.fromQuery(query)
+                    ).also {
+                        it.fetchPage()
+                        currentSearchExtractor = it
+                    }
+                } ?: return@launch
 
-                _searchResults.value = searchInfo.relatedItems
+                val searchInfo = extractor.initialPage
+
+                val newResults = searchInfo.items
                     .filterIsInstance<StreamInfoItem>()
-                    .filterNot { item -> isVideoDownloaded(extractYouTubeVideoId(item.url)) }
                     .map { item ->
                         YouTubeSearchResult(
                             title = item.name,
                             url = item.url,
-                            videoId = extractYouTubeVideoId(item.url) ,
+                            videoId = extractYouTubeVideoId(item.url),
                             thumbnailUrl = item.thumbnails.firstOrNull()?.url ?: "",
                             duration = item.duration,
                             uploader = item.uploaderName,
                             viewCount = item.viewCount
                         )
                     }
+                    .filterNot { result ->
+                        _videos.value.any { it.id == result.videoId } ||
+                                _downloadingUrls.value.contains(result.url)
+                    }
+
+                _searchResults.value = if (loadNextPage) {
+                    _searchResults.value + newResults
+                } else {
+                    newResults
+                }
+
+                // If we got results but they're all filtered out, try loading the next page
+                if (newResults.isEmpty() && searchInfo.items.isNotEmpty() && !loadNextPage) {
+                    searchVideos(query, loadNextPage = true)
+                }
+
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {

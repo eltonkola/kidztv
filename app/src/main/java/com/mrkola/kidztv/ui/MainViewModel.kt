@@ -19,8 +19,8 @@ class MainViewModel(
     private val _uiState = MutableStateFlow<MainUiState>(MainUiState.Loading)
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
-    init {
-        loadVideos()
+    fun reset(){
+        _uiState.value = MainUiState.Loading
     }
 
     fun loadVideos() {

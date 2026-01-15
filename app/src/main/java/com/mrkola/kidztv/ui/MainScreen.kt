@@ -74,9 +74,14 @@ fun MainScreen(
     val isLoading = uiState is MainUiState.Loading
     val alpha by animateFloatAsState(if (isLoading) 0.5f else 1f, label = "")
 
+    LaunchedEffect(Unit) {
+        viewModel.loadVideos()
+    }
+
     LaunchedEffect(uiState) {
         if (uiState is MainUiState.Success && (uiState as MainUiState.Success).videos.isEmpty()) {
             onParentalControlsClick()
+            viewModel.reset()
         }
     }
 
