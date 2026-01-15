@@ -4,6 +4,8 @@ import com.mrkola.kidztv.data.VideoDownloader
 import com.mrkola.kidztv.data.VideoRepository
 import com.mrkola.kidztv.ui.MainViewModel
 import com.mrkola.kidztv.ui.ParentalControlsViewModel
+import com.mrkola.kidztv.ui.PlayerViewModel
+import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import org.schabi.newpipe.extractor.NewPipe
@@ -17,6 +19,13 @@ val appModule = module {
     }
     single { VideoRepository(get(), get()) }
 
+    viewModel { (videoId: Long) ->
+        PlayerViewModel(
+            application = androidApplication(),
+            videoRepository = get(),
+            initialVideoId = videoId
+        )
+    }
 
     viewModel { ParentalControlsViewModel(get()) }
     viewModel { MainViewModel(get()) }
