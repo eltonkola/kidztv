@@ -42,11 +42,12 @@ import com.mrkola.kidztv.data.VideoRepository
 import kotlinx.coroutines.delay
 import androidx.compose.ui.unit.Dp
 import androidx.media3.ui.AspectRatioFrameLayout
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PlayerScreen(
-    videoRepository: VideoRepository,
+    videoRepository: VideoRepository = koinInject(),
     initialVideoId: Long,
     onBack: () -> Unit
 ) {

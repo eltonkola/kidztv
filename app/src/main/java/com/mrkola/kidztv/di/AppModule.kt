@@ -2,6 +2,7 @@ package com.mrkola.kidztv.di
 
 import com.mrkola.kidztv.data.VideoDownloader
 import com.mrkola.kidztv.data.VideoRepository
+import com.mrkola.kidztv.ui.MainViewModel
 import com.mrkola.kidztv.ui.ParentalControlsViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -9,8 +10,6 @@ import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.downloader.Downloader
 
 val appModule = module {
-
-//    single { VideoDownloader() }
 
     single<Downloader> {
         NewPipe.init(VideoDownloader())
@@ -20,6 +19,7 @@ val appModule = module {
 
 
     viewModel { ParentalControlsViewModel(get()) }
+    viewModel { MainViewModel(get()) }
 
 
 }

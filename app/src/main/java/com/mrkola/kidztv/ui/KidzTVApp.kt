@@ -10,22 +10,13 @@ import org.koin.compose.koinInject
 
 @Composable
 fun KidzTVApp(
-    videoRepository: VideoRepository = koinInject()
 ) {
 
     val navController = rememberNavController()
 
-    LaunchedEffect(Unit) {
-        val videos = videoRepository.getAllVideos()
-        if (videos.isEmpty()) {
-            navController.navigate("math_challenge")
-        }
-    }
-
     NavHost(navController = navController, startDestination = "main") {
         composable("main") {
             MainScreen(
-                videoRepository = videoRepository,
                 onVideoClick = { video ->
                     navController.navigate("player/${video.id}")
                 },
@@ -39,7 +30,6 @@ fun KidzTVApp(
             val videoId = backStackEntry.arguments?.getString("videoId")?.toLongOrNull()
             videoId?.let {
                 PlayerScreen(
-                    videoRepository = videoRepository,
                     initialVideoId = it,
                     onBack = { navController.popBackStack() }
                 )
