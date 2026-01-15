@@ -126,6 +126,8 @@ class ParentalControlsViewModel(
     }
 
     private fun loadVideos() {
-        _videos.value = videoRepository.getAllVideos()
+        viewModelScope.launch {
+            _videos.value = videoRepository.getAllVideos()
+        }
     }
 }

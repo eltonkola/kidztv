@@ -3,6 +3,7 @@ package com.mrkola.kidztv.ui
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
@@ -32,7 +33,6 @@ class PlayerViewModel(
     private var released = false
     private var updateJob: Job? = null
     private var currentVideo: Video? = null
-    private val videos = videoRepository.getAllVideos()
 
     private var playerListener: Player.Listener? = null
 
@@ -41,65 +41,73 @@ class PlayerViewModel(
     }
 
     private fun initializePlayer(videoId: Long) {
-        val video = videos.find { it.id == videoId }
-        if (video == null) {
-            _uiState.value = PlayerUiState.Error("Video not found")
-            return
-        }
 
-        currentVideo = video
-        exoPlayer.clearMediaItems()
+        viewModelScope.launch {
+            val videos = videoRepository.getAllVideos()
 
-        playerListener = object : Player.Listener {
+            val video = videos.find { it.id == videoId }
+            if (video == null) {
+                _uiState.value = PlayerUiState.Error("Video not found")
+                return@launch
+            }
 
-            override fun onPlaybackStateChanged(playbackState: Int) {
-                if (released) return
+            currentVideo = video
+            exoPlayer.clearMediaItems()
 
-                _uiState.update { state ->
-                    when (playbackState) {
-                        Player.STATE_READY -> {
-                            PlayerUiState.Ready(
-                                currentVideo = video,
-                                videos = videos,
-                                isPlaying = exoPlayer.isPlaying,
-                                isLocked = false,
-                                currentPosition = exoPlayer.currentPosition,
-                                duration = exoPlayer.duration,
-                                isBuffering = false,
-                                showControls = true
-                            )
+            playerListener = object : Player.Listener {
+
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    if (released) return
+
+                    _uiState.update { state ->
+                        when (playbackState) {
+                            Player.STATE_READY -> {
+                                PlayerUiState.Ready(
+                                    currentVideo = video,
+                                    videos = videos,
+                                    isPlaying = exoPlayer.isPlaying,
+                                    isLocked = false,
+                                    currentPosition = exoPlayer.currentPosition,
+                                    duration = exoPlayer.duration,
+                                    isBuffering = false,
+                                    showControls = true
+                                )
+                            }
+
+                            Player.STATE_BUFFERING -> {
+                                if (state is PlayerUiState.Ready) {
+                                    state.copy(isBuffering = true)
+                                } else state
+                            }
+
+                            else -> state
                         }
+                    }
+                }
 
-                        Player.STATE_BUFFERING -> {
-                            if (state is PlayerUiState.Ready) {
-                                state.copy(isBuffering = true)
-                            } else state
-                        }
-
-                        else -> state
+                override fun onIsPlayingChanged(isPlaying: Boolean) {
+                    if (released) return
+                    _uiState.update {
+                        if (it is PlayerUiState.Ready) {
+                            it.copy(isPlaying = isPlaying)
+                        } else it
                     }
                 }
             }
 
-            override fun onIsPlayingChanged(isPlaying: Boolean) {
-                if (released) return
-                _uiState.update {
-                    if (it is PlayerUiState.Ready) {
-                        it.copy(isPlaying = isPlaying)
-                    } else it
-                }
+            exoPlayer.apply {
+                addListener(playerListener!!)
+                setMediaItem(MediaItem.fromUri(video.filePath))
+                repeatMode = Player.REPEAT_MODE_ONE
+                prepare()
+                playWhenReady = true
             }
+
+            startProgressUpdates()
+
         }
 
-        exoPlayer.apply {
-            addListener(playerListener!!)
-            setMediaItem(MediaItem.fromUri(video.filePath))
-            repeatMode = Player.REPEAT_MODE_ONE
-            prepare()
-            playWhenReady = true
-        }
 
-        startProgressUpdates()
     }
 
     private fun startProgressUpdates() {
@@ -140,7 +148,11 @@ class PlayerViewModel(
     }
 
     fun changeVideo(videoId: Long) {
-        val video = videos.find { it.id == videoId } ?: return
+
+        viewModelScope.launch {
+            val videos = (uiState.value as PlayerUiState.Ready).videos
+
+        val video = videos.find { it.id == videoId } ?: return@launch
 
         currentVideo = video
 
@@ -162,6 +174,8 @@ class PlayerViewModel(
             isBuffering = false,
             showControls = true
         )
+
+        }
     }
 
     private fun cleanup() {

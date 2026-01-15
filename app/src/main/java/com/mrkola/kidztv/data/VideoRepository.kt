@@ -20,25 +20,31 @@ class VideoRepository(private val context: Context, val downloader: Downloader) 
         thumbnailsDir.mkdirs()
     }
 
-    fun getAllVideos(): List<Video> {
-        return videosDir.listFiles()
+    suspend fun getAllVideos(): List<Video> = withContext(Dispatchers.IO) {
+        videosDir.listFiles()
             ?.filter { it.extension == "mp4" }
             ?.map { file ->
+                val metaFile = File(videosDir, "${file.nameWithoutExtension}.meta")
+                val thumbnailFile = File(thumbnailsDir, "${file.nameWithoutExtension}.jpg")
+
                 Video(
                     id = file.nameWithoutExtension.toLongOrNull() ?: 0L,
-                    title = extractTitle(file),
+                    title = if (metaFile.exists()) metaFile.readText() else file.nameWithoutExtension,
                     filePath = file.absolutePath,
-                    thumbnailPath = getThumbnailPath(file),
-                    duration = getVideoDuration(file),
+                    thumbnailPath = if (thumbnailFile.exists()) thumbnailFile.absolutePath else null,
+                    duration = getVideoDurationCached(file),
                     dateAdded = file.lastModified()
                 )
             }
             ?.sortedByDescending { it.dateAdded }
             ?: emptyList()
     }
+    private val durationCache = mutableMapOf<String, Long>()
 
-    fun getVideoById(id: Long): Video? {
-        return getAllVideos().find { it.id == id }
+    private fun getVideoDurationCached(file: File): Long {
+        return durationCache.getOrPut(file.absolutePath) {
+            getVideoDuration(file)
+        }
     }
 
     fun deleteVideo(video: Video) {
