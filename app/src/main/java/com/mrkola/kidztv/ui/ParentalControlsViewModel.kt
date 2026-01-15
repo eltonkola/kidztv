@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mrkola.kidztv.data.Video
 import com.mrkola.kidztv.data.VideoDownloader
 import com.mrkola.kidztv.data.VideoRepository
+import com.mrkola.kidztv.data.extractYouTubeVideoId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,6 +40,12 @@ class ParentalControlsViewModel(
 
     }
 
+    fun isVideoDownloaded(videoId: String): Boolean {
+        return _videos.value.any { video ->
+            video.id == videoId
+        }
+    }
+
     fun searchVideos(query: String) {
         if (query.isBlank()) return
 
@@ -52,15 +59,16 @@ class ParentalControlsViewModel(
 
                 _searchResults.value = searchInfo.relatedItems
                     .filterIsInstance<StreamInfoItem>()
+                    .filterNot { item -> isVideoDownloaded(extractYouTubeVideoId(item.url)) }
                     .map { item ->
                         YouTubeSearchResult(
                             title = item.name,
                             url = item.url,
+                            videoId = extractYouTubeVideoId(item.url) ,
                             thumbnailUrl = item.thumbnails.firstOrNull()?.url ?: "",
                             duration = item.duration,
                             uploader = item.uploaderName,
                             viewCount = item.viewCount
-
                         )
                     }
             } catch (e: Exception) {
@@ -70,6 +78,7 @@ class ParentalControlsViewModel(
             }
         }
     }
+
 
     fun toggleVideoSelection(url: String) {
         _selectedVideos.value = if (url in _selectedVideos.value) {
@@ -128,6 +137,10 @@ class ParentalControlsViewModel(
     private fun loadVideos() {
         viewModelScope.launch {
             _videos.value = videoRepository.getAllVideos()
+            // Clear search results to avoid showing already downloaded videos
+            _searchResults.value = _searchResults.value.filterNot { result ->
+                _videos.value.any { it.id == result.videoId }
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class PlayerViewModel(
     application: Application,
     private val videoRepository: VideoRepository,
-    initialVideoId: Long
+    initialVideoId: String
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<PlayerUiState>(PlayerUiState.Loading)
@@ -40,7 +40,7 @@ class PlayerViewModel(
         initializePlayer(initialVideoId)
     }
 
-    private fun initializePlayer(videoId: Long) {
+    private fun initializePlayer(videoId: String) {
 
         viewModelScope.launch {
             val videos = videoRepository.getAllVideos()
@@ -147,7 +147,7 @@ class PlayerViewModel(
         }
     }
 
-    fun changeVideo(videoId: Long) {
+    fun changeVideo(videoId: String) {
 
         viewModelScope.launch {
             val videos = (uiState.value as PlayerUiState.Ready).videos

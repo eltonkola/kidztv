@@ -80,6 +80,7 @@ import kotlin.math.pow
 data class YouTubeSearchResult(
     val title: String,
     val url: String,
+    val videoId: String,
     val thumbnailUrl: String,
     val duration: Long,
     val uploader: String,
@@ -726,10 +727,8 @@ fun YouTubeResultCard(
                 }
             }
 
-            // Download Button
-            if (isDownloading) {
-                CircularProgressIndicator(modifier = Modifier.size(if (isLandscape) 40.dp else 32.dp))
-            } else {
+            // Download Button - Only show if not downloading and not already downloaded
+            if (!isDownloading && downloadProgress == 0) {
                 IconButton(
                     onClick = onDownload,
                     modifier = Modifier.background(

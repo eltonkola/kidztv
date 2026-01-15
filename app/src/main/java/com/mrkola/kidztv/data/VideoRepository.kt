@@ -26,14 +26,16 @@ class VideoRepository(private val context: Context, val downloader: Downloader) 
             ?.map { file ->
                 val metaFile = File(videosDir, "${file.nameWithoutExtension}.meta")
                 val thumbnailFile = File(thumbnailsDir, "${file.nameWithoutExtension}.jpg")
+                val metaContent = if (metaFile.exists()) metaFile.readLines() else emptyList()
+                val title = metaContent.getOrNull(0) ?: file.nameWithoutExtension
 
                 Video(
-                    id = file.nameWithoutExtension.toLongOrNull() ?: 0L,
-                    title = if (metaFile.exists()) metaFile.readText() else file.nameWithoutExtension,
+                    id = file.nameWithoutExtension,
+                    title = title,
                     filePath = file.absolutePath,
                     thumbnailPath = if (thumbnailFile.exists()) thumbnailFile.absolutePath else null,
                     duration = getVideoDurationCached(file),
-                    dateAdded = file.lastModified()
+                    dateAdded = file.lastModified(),
                 )
             }
             ?.sortedByDescending { it.dateAdded }
@@ -61,9 +63,9 @@ class VideoRepository(private val context: Context, val downloader: Downloader) 
             val bestStream = videoStreams.maxByOrNull { it.height }
                 ?: return@withContext Result.failure(Exception("No video streams found"))
 
-            val videoId = System.currentTimeMillis()
-            val videoFile = File(videosDir, "$videoId.mp4")
-            val thumbnailFile = File(thumbnailsDir, "$videoId.jpg")
+            val youtubeId = extractor.id
+            val videoFile = File(videosDir, "$youtubeId.mp4")
+            val thumbnailFile = File(thumbnailsDir, "$youtubeId.jpg")
 
             // Download video
             downloadFileWithProgress(bestStream.content, videoFile) { progress ->
@@ -74,12 +76,12 @@ class VideoRepository(private val context: Context, val downloader: Downloader) 
                 downloadFile(thumbnail.url, thumbnailFile)
             }
 
-            // Save title in a metadata file
-            val metaFile = File(videosDir, "$videoId.meta")
+            // Save metadata (title)
+            val metaFile = File(videosDir, "$youtubeId.meta")
             metaFile.writeText(extractor.name)
 
             val video = Video(
-                id = videoId,
+                id = youtubeId,
                 title = extractor.name,
                 filePath = videoFile.absolutePath,
                 thumbnailPath = thumbnailFile.absolutePath,
@@ -163,4 +165,13 @@ class VideoRepository(private val context: Context, val downloader: Downloader) 
             0L
         }
     }
+}
+
+fun extractYouTubeVideoId(url: String): String {
+    val regex = Regex(
+        "(?:youtube\\.com/(?:[^/\\n\\s]+/\\S+/|(?:v|e(?:mbed)?)/|\\S*?[?&]v=)|youtu\\.be/)([a-zA-Z0-9_-]{11})",
+        RegexOption.IGNORE_CASE
+    )
+
+    return regex.find(url)?.groupValues?.get(1) ?: "007"
 }

@@ -19,7 +19,7 @@ val appModule = module {
     }
     single { VideoRepository(get(), get()) }
 
-    viewModel { (videoId: Long) ->
+    viewModel { (videoId: String) ->
         PlayerViewModel(
             application = androidApplication(),
             videoRepository = get(),
