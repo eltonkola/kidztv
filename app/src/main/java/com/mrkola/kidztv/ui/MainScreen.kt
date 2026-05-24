@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -99,7 +100,7 @@ fun MainScreen(
             ) {
                 Image(
                     painter = painterResource(R.drawable.tv_logo_horizontal),
-                    contentDescription = "KidzTV",
+                    contentDescription = stringResource(R.string.app_name),
                     modifier = Modifier.height(40.dp)
                 )
 
@@ -115,7 +116,7 @@ fun MainScreen(
                     ) {
                         Icon(
                             Icons.Default.Settings,
-                            contentDescription = "Settings",
+                            contentDescription = stringResource(R.string.settings),
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -148,7 +149,7 @@ fun MainScreen(
                                 verticalArrangement = Arrangement.Center
                             ) {
                                 Text(
-                                    text = "Error loading videos",
+                                    text = stringResource(R.string.error_loading_videos),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = Color.White,
                                     textAlign = TextAlign.Center
@@ -169,7 +170,7 @@ fun MainScreen(
                                 ) {
                                     Icon(
                                         Icons.Default.Refresh,
-                                        contentDescription = "Retry",
+                                        contentDescription = stringResource(R.string.retry),
                                         tint = MaterialTheme.colorScheme.primary
                                     )
                                 }
@@ -183,7 +184,7 @@ fun MainScreen(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "No videos available",
+                                    text = stringResource(R.string.no_videos_available),
                                     style = MaterialTheme.typography.headlineSmall,
                                     color = Color.White,
                                     textAlign = TextAlign.Center

@@ -1,5 +1,7 @@
 package com.mrkola.kidztv.di
 
+import androidx.room.Room
+import com.mrkola.kidztv.data.KidzTvDatabase
 import com.mrkola.kidztv.data.VideoDownloader
 import com.mrkola.kidztv.data.VideoRepository
 import com.mrkola.kidztv.ui.MainViewModel
@@ -13,11 +15,21 @@ import org.schabi.newpipe.extractor.downloader.Downloader
 
 val appModule = module {
 
+    single {
+        Room.databaseBuilder(
+            androidApplication(),
+            KidzTvDatabase::class.java,
+            "kidztv.db"
+        ).fallbackToDestructiveMigration().build()
+    }
+
+    single { get<KidzTvDatabase>().videoDao() }
+
     single<Downloader> {
         NewPipe.init(VideoDownloader())
         NewPipe.getDownloader()
     }
-    single { VideoRepository(get(), get()) }
+    single { VideoRepository(get(), get(), get()) }
 
     viewModel { (videoId: String) ->
         PlayerViewModel(
@@ -27,7 +39,7 @@ val appModule = module {
         )
     }
 
-    viewModel { ParentalControlsViewModel(get()) }
+    viewModel { ParentalControlsViewModel(get(), androidApplication()) }
     viewModel { MainViewModel(get()) }
 
 

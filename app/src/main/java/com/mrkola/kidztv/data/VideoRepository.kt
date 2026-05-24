@@ -10,100 +10,125 @@ import org.schabi.newpipe.extractor.downloader.Downloader
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
+import kotlinx.coroutines.flow.map
 
-class VideoRepository(private val context: Context, val downloader: Downloader) {
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+
+class VideoRepository(
+    private val context: Context,
+    val downloader: Downloader,
+    private val videoDao: VideoDao
+) {
+    private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val videosDir = File(context.filesDir, "videos")
     private val thumbnailsDir = File(context.filesDir, "thumbnails")
 
     init {
         videosDir.mkdirs()
         thumbnailsDir.mkdirs()
+        
+        // Background sync existing files to database if they're not there
+        // This is a one-time migration
+        repositoryScope.launch {
+            syncWithFileSystem()
+        }
     }
 
-    suspend fun getAllVideos(): List<Video> = withContext(Dispatchers.IO) {
-        videosDir.listFiles()
-            ?.filter { it.extension == "mp4" }
-            ?.map { file ->
-                val metaFile = File(videosDir, "${file.nameWithoutExtension}.meta")
-                val thumbnailFile = File(thumbnailsDir, "${file.nameWithoutExtension}.jpg")
-                val metaContent = if (metaFile.exists()) metaFile.readLines() else emptyList()
-                val title = metaContent.getOrNull(0) ?: file.nameWithoutExtension
-
-                Video(
-                    id = file.nameWithoutExtension,
+    private suspend fun syncWithFileSystem() {
+        val files = videosDir.listFiles()?.filter { it.extension == "mp4" } ?: return
+        files.forEach { file ->
+            val youtubeId = file.nameWithoutExtension
+            if (videoDao.getVideoById(youtubeId) == null) {
+                val metaFile = File(videosDir, "$youtubeId.meta")
+                val title = if (metaFile.exists()) metaFile.readText() else youtubeId
+                val thumbnailFile = File(thumbnailsDir, "$youtubeId.jpg")
+                
+                val video = VideoEntity(
+                    id = youtubeId,
                     title = title,
                     filePath = file.absolutePath,
                     thumbnailPath = if (thumbnailFile.exists()) thumbnailFile.absolutePath else null,
-                    duration = getVideoDurationCached(file),
-                    dateAdded = file.lastModified(),
+                    duration = getVideoDuration(file),
+                    dateAdded = file.lastModified()
                 )
+                videoDao.insertVideo(video)
             }
-            ?.sortedByDescending { it.dateAdded }
-            ?: emptyList()
-    }
-    private val durationCache = mutableMapOf<String, Long>()
-
-    private fun getVideoDurationCached(file: File): Long {
-        return durationCache.getOrPut(file.absolutePath) {
-            getVideoDuration(file)
         }
     }
 
-    fun deleteVideo(video: Video) {
-        File(video.filePath).delete()
-        video.thumbnailPath?.let { File(it).delete() }
+    suspend fun getAllVideos(): List<Video> = withContext(Dispatchers.IO) {
+        videoDao.getAllVideos().map { it.toVideo() }
     }
 
-    suspend fun downloadVideo(url: String, onProgress: (Int) -> Unit = {}): Result<Video> = withContext(Dispatchers.IO) {
-        try {
-            val extractor = ServiceList.YouTube.getStreamExtractor(url)
-            extractor.fetchPage()
-
-            val videoStreams = extractor.videoStreams
-            val bestStream = videoStreams.maxByOrNull { it.height }
-                ?: return@withContext Result.failure(Exception("No video streams found"))
-
-            val youtubeId = extractor.id
-            val videoFile = File(videosDir, "$youtubeId.mp4")
-            val thumbnailFile = File(thumbnailsDir, "$youtubeId.jpg")
-
-            // Download video
-            downloadFileWithProgress(bestStream.content, videoFile) { progress ->
-                onProgress(progress)
-            }
-            // Download thumbnail
-            extractor.thumbnails.firstOrNull()?.let { thumbnail ->
-                downloadFile(thumbnail.url, thumbnailFile)
-            }
-
-            // Save metadata (title)
-            val metaFile = File(videosDir, "$youtubeId.meta")
-            metaFile.writeText(extractor.name)
-
-            val video = Video(
-                id = youtubeId,
-                title = extractor.name,
-                filePath = videoFile.absolutePath,
-                thumbnailPath = thumbnailFile.absolutePath,
-                duration = extractor.length * 1000L
-            )
-
-            Result.success(video)
-        } catch (e: Exception) {
-            Result.failure(e)
+    fun getVideosFlow(): kotlinx.coroutines.flow.Flow<List<Video>> {
+        return videoDao.getAllVideosFlow().map { entities ->
+            entities.map { it.toVideo() }
         }
     }
 
-    private fun downloadFile(url: String, destination: File, onProgress: (Int) -> Unit = {}) {
+    suspend fun deleteVideo(video: Video) = withContext(Dispatchers.IO) {
+        val file = File(video.filePath)
+        if (file.exists()) file.delete()
+        video.thumbnailPath?.let {
+            val thumbFile = File(it)
+            if (thumbFile.exists()) thumbFile.delete()
+        }
+        videoDao.deleteVideo(video.toEntity())
+    }
+
+    suspend fun downloadVideo(url: String, onProgress: suspend (Int, Long) -> Unit = { _, _ -> }): Result<Video> =
+        withContext(Dispatchers.IO) {
+            try {
+                val extractor = ServiceList.YouTube.getStreamExtractor(url)
+                extractor.fetchPage()
+
+                // Filter for video streams with audio, prefer 720p or lower to save space
+                val videoStreams = extractor.videoStreams
+                val bestStream = videoStreams
+                    .filter { it.resolution.contains("720") || it.resolution.contains("480") || it.resolution.contains("360") }
+                    .maxByOrNull { it.height }
+                    ?: videoStreams.maxByOrNull { it.height } // Fallback to best if no 720p/lower
+                    ?: return@withContext Result.failure(Exception("No video streams found"))
+
+                val youtubeId = extractor.id
+                val videoFile = File(videosDir, "$youtubeId.mp4")
+                val thumbnailFile = File(thumbnailsDir, "$youtubeId.jpg")
+
+                // Download video
+                downloadFileWithProgress(bestStream.content, videoFile) { progress, speed ->
+                    onProgress(progress, speed)
+                }
+                // Download thumbnail
+                extractor.thumbnails.firstOrNull()?.let { thumbnail ->
+                    downloadFile(thumbnail.url, thumbnailFile)
+                }
+
+                val video = Video(
+                    id = youtubeId,
+                    title = extractor.name,
+                    filePath = videoFile.absolutePath,
+                    thumbnailPath = thumbnailFile.absolutePath,
+                    duration = extractor.length * 1000L,
+                    dateAdded = System.currentTimeMillis()
+                )
+
+                videoDao.insertVideo(video.toEntity())
+
+                Result.success(video)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+
+    private fun downloadFile(url: String, destination: File) {
         URL(url).openStream().use { input ->
             FileOutputStream(destination).use { output ->
                 val buffer = ByteArray(8192)
                 var bytesRead: Int
-                var totalBytes = 0L
-
                 while (input.read(buffer).also { bytesRead = it } != -1) {
                     output.write(buffer, 0, bytesRead)
-                    totalBytes += bytesRead
                 }
             }
         }
@@ -112,7 +137,7 @@ class VideoRepository(private val context: Context, val downloader: Downloader) 
     private suspend fun downloadFileWithProgress(
         url: String,
         destination: File,
-        onProgress: (Int) -> Unit
+        onProgress: suspend (Int, Long) -> Unit
     ) = withContext(Dispatchers.IO) {
         val connection = URL(url).openConnection()
         connection.connect()
@@ -122,15 +147,30 @@ class VideoRepository(private val context: Context, val downloader: Downloader) 
         val output = FileOutputStream(destination)
 
         try {
-            val data = ByteArray(1024)
+            val data = ByteArray(8192)
             var total: Long = 0
             var count: Int
+            var lastUpdateTime = System.currentTimeMillis()
+            var bytesSinceLastUpdate: Long = 0
 
             while (input.read(data).also { count = it } != -1) {
                 total += count.toLong()
-                val progress = ((total * 100) / fileLength).toInt()
-                withContext(Dispatchers.Main) {
-                    onProgress(progress)
+                bytesSinceLastUpdate += count.toLong()
+                
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - lastUpdateTime >= 500) { // Update every 500ms
+                    val timeDiff = (currentTime - lastUpdateTime) / 1000.0
+                    val speed = (bytesSinceLastUpdate / timeDiff).toLong() // bytes per second
+                    
+                    if (fileLength > 0) {
+                        val progress = ((total * 100) / fileLength).toInt()
+                        onProgress(progress, speed)
+                    } else {
+                        onProgress(-1, speed) // Unknown total length
+                    }
+                    
+                    lastUpdateTime = currentTime
+                    bytesSinceLastUpdate = 0
                 }
                 output.write(data, 0, count)
             }
@@ -138,20 +178,6 @@ class VideoRepository(private val context: Context, val downloader: Downloader) 
             input.close()
             output.close()
         }
-    }
-
-    private fun extractTitle(file: File): String {
-        val metaFile = File(videosDir, "${file.nameWithoutExtension}.meta")
-        return if (metaFile.exists()) {
-            metaFile.readText()
-        } else {
-            file.nameWithoutExtension
-        }
-    }
-
-    private fun getThumbnailPath(file: File): String? {
-        val thumbnailFile = File(thumbnailsDir, "${file.nameWithoutExtension}.jpg")
-        return if (thumbnailFile.exists()) thumbnailFile.absolutePath else null
     }
 
     private fun getVideoDuration(file: File): Long {

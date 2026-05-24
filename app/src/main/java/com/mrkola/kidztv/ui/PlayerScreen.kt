@@ -61,6 +61,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -69,6 +70,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.ui.PlayerView
 import coil.compose.rememberAsyncImagePainter
+import com.mrkola.kidztv.R
 import com.mrkola.kidztv.data.Video
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -208,7 +210,7 @@ fun PlayerScreen(
                                 ) {
                                     Icon(
                                         Icons.AutoMirrored.Filled.ArrowBack,
-                                        contentDescription = "Back",
+                                        contentDescription = stringResource(R.string.back),
                                         tint = Color.White,
                                         modifier = Modifier.size(24.dp)
                                     )
@@ -239,7 +241,7 @@ fun PlayerScreen(
                                 ) {
                                     Icon(
                                         if (isLocked) Icons.Default.Lock else Icons.Default.LockOpen,
-                                        contentDescription = if (isLocked) "Unlock" else "Lock",
+                                        contentDescription = if (isLocked) stringResource(R.string.unlock) else stringResource(R.string.lock),
                                         tint = Color.White,
                                         modifier = Modifier.size(24.dp)
                                     )
@@ -382,7 +384,7 @@ fun PlayerScreen(
                                             modifier = Modifier.size(20.dp)
                                         )
                                         Text(
-                                            "Double tap to unlock",
+                                            stringResource(R.string.double_tap_to_unlock),
                                             color = Color.White,
                                             fontSize = 12.sp,
                                             fontWeight = FontWeight.Medium

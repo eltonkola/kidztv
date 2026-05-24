@@ -24,14 +24,10 @@ class MainViewModel(
     }
 
     fun loadVideos() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.value = MainUiState.Loading
-            try {
-                //delay(5_000)
-                val videos = videoRepository.getAllVideos()
+            videoRepository.getVideosFlow().collect { videos ->
                 _uiState.value = MainUiState.Success(videos)
-            } catch (e: Exception) {
-                _uiState.value = MainUiState.Error(e.message ?: "Unknown error occurred")
             }
         }
     }

@@ -11,9 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.mrkola.kidztv.R
 import kotlin.random.Random
 
 @Composable
@@ -128,7 +130,7 @@ private fun ProblemSection(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            "Parent Verification",
+            stringResource(R.string.parent_verification),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
@@ -136,7 +138,7 @@ private fun ProblemSection(
         Spacer(Modifier.height(8.dp))
 
         Text(
-            "Solve the math problem",
+            stringResource(R.string.solve_math_problem),
             color = Color.Gray
         )
 
@@ -160,7 +162,7 @@ private fun ProblemSection(
         if (showError) {
             Spacer(Modifier.height(8.dp))
             Text(
-                "Incorrect, try again",
+                stringResource(R.string.incorrect_try_again),
                 color = MaterialTheme.colorScheme.error
             )
         }
@@ -197,7 +199,7 @@ private fun NumpadSection(
             onClick = onCancel,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Cancel")
+            Text(stringResource(R.string.cancel))
         }
     }
 }
@@ -234,7 +236,10 @@ private fun Numpad(
                             .weight(1f)
                             .height(64.dp)
                     ) {
-                        Text(label, style = MaterialTheme.typography.titleLarge)
+                        Text(
+                            if (label == "OK") stringResource(R.string.ok) else label,
+                            style = MaterialTheme.typography.titleLarge
+                        )
                     }
                 }
             }

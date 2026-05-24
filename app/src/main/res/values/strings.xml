@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">KidzTv</string>
+    <string name="settings">Settings</string>
+    <string name="retry">Retry</string>
+    <string name="error_loading_videos">Error loading videos</string>
+    <string name="no_videos_available">No videos available</string>
+    <string name="back">Back</string>
+    <string name="unlock">Unlock</string>
+    <string name="lock">Lock</string>
+    <string name="double_tap_to_unlock">Double tap to unlock</string>
+    <string name="parent_verification">Parent Verification</string>
+    <string name="solve_math_problem">Solve the math problem</string>
+    <string name="incorrect_try_again">Incorrect, try again</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="downloaded_videos">Downloaded Videos (%1$d)</string>
+    <string name="no_videos_downloaded">No videos downloaded yet</string>
+    <string name="search_videos_placeholder">Search videos…</string>
+    <string name="download_selected">Download Selected</string>
+    <string name="download">Download</string>
+    <string name="search_for_videos">Search for videos to download</string>
+    <string name="delete_video_title">Delete Video?</string>
+    <string name="delete_video_message">Are you sure you want to delete \"%1$s\"? This action cannot be undone.</string>
+    <string name="delete">Delete</string>
+    <string name="parental_controls">Parental Controls</string>
+    <string name="about">About</string>
+    <string name="views">%1$s views</string>
+    <string name="video_not_found">Video not found</string>
+    <string name="failed_to_download_video">Failed to download video: %1$s</string>
+    <string name="error_during_download">Error during download: %1$s</string>
 </resources>
